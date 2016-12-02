@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour {
     public GameObject Player;
     public GameObject AStarGrid;
     public List<GameObject> CurrentRoomEnemies;
+    public List<GameObject> PathRequests;
 
 
     public enum GameState
@@ -34,6 +35,7 @@ public class GameManager : MonoBehaviour {
     }
     void Awake()
     {
+        QualitySettings.vSyncCount =2;
         if (instance == null)
             instance = this;
         else if (instance != this)
@@ -76,20 +78,15 @@ public class GameManager : MonoBehaviour {
         m_DungeonGenerator = dungeonGenerator.GetComponent<DunGen.RuntimeDungeon>();
         m_DungeonGenerator.Generate();
         Dungeon = GameObject.Find("Dungeon");
-        Debug.Log( Dungeon.GetComponent<DunGen.Dungeon>().Bounds.size.x);
+        Dungeon.transform.position = new Vector3(Dungeon.transform.position.x, Dungeon.transform.position.y,.001f);
+        Dungeon.layer = 10;
         m_RootRoom = Dungeon.transform.GetChild(0).gameObject;
-        SpawnPlayer(new Vector2(m_RootRoom.transform.GetChild(0).position.x, m_RootRoom.transform.GetChild(1).position.y));
+        SpawnPlayer(new Vector2(m_RootRoom.transform.GetChild(0).position.x, m_RootRoom.transform.GetChild(0).position.y));
         SpawnEnemies(Player.GetComponent<PlayerMove>().CurrentRoom);
-        
-        //for (int i = 0; i < 10; i++)
-        //{ 
-        //    GameObject enemy = Instantiate((GameObject)Resources.Load("Prefabs/Octorok", typeof(GameObject)));
-        //    enemy.transform.position = new Vector3(0, 0, -.001f);
-        //    enemy.GetComponent<EnemyAI>().CurrentRoom = Dungeon.transform.GetChild(0).gameObject;
-        //} 
+        StartCoroutine(ProcessPathRequests());
         Camera.main.GetComponent<CameraMove>().Focus = GameManager.singleton.Player;
         Camera.main.GetComponent<CameraMove>().SetCameraBoundary();
-        //AdjustAStarGridToRoom();
+        AdjustAStarGridToRoom(m_RootRoom);
     }
 
     /*
@@ -98,19 +95,21 @@ public class GameManager : MonoBehaviour {
     public void TransitionRoom(GameObject Room, Vector3 NewPosition)
     {
         PlayerMove pm = Player.GetComponent<PlayerMove>();
-        Debug.Log("Trigger: RoomTransition");
         RemoveEnemiesFromRoom(pm.CurrentRoom);
         pm.CurrentRoom = Room;
         Player.transform.position = new Vector3(NewPosition.x, NewPosition.y, -.001f);
         Camera.main.GetComponent<CameraMove>().SetCameraBoundary();
+        AdjustAStarGridToRoom(Room);
+        SpawnEnemies(Room);
     }
 
     /*
-     * 
+     * Changes the AStarPathfindingGrids position and dimensions to match room
      */
     public void AdjustAStarGridToRoom(GameObject Room)
     {
-
+        AStarGrid.GetComponent<AstarPath>().astarData.gridGraph.center = Room.transform.position;
+        AstarPath.active.Scan();
     }
 
     /*
@@ -120,7 +119,10 @@ public class GameManager : MonoBehaviour {
     {
         foreach(GameObject enemy in CurrentRoomEnemies)
         {
-            enemy.GetComponent<EnemyAI>().path.Release(enemy);
+            if (enemy.GetComponent<EnemyAI>().path != null)
+            {
+                enemy.GetComponent<EnemyAI>().path.Release(enemy);
+            }
             Destroy(enemy);
         }
         CurrentRoomEnemies.Clear();
@@ -145,4 +147,20 @@ public class GameManager : MonoBehaviour {
             }
         }
     }
+
+    IEnumerator ProcessPathRequests()
+    {
+        if (PathRequests.Count > 0)
+        {
+            EnemyAI a = PathRequests[0].GetComponent<EnemyAI>();
+            Seeker s = PathRequests[0].GetComponent<Seeker>();
+            s.StartPath(a.transform.position, a.Target, a.OnPathComplete);
+            PathRequests.RemoveAt(0);
+        }
+        yield return new WaitForSeconds(1.0f / 10);
+        //StartCoroutine(ProcessPathRequests());
+    }
+
+
 }
+

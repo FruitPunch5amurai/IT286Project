@@ -21,5 +21,16 @@ public class RoomCollider : MonoBehaviour
             GameManager.singleton.TransitionRoom(col.transform.parent.GetComponent<DunGen.Doorway>().ConnectedDoorway.transform.parent.gameObject,
                 col.transform.parent.GetComponent<DunGen.Doorway>().ConnectedDoorway.transform.GetChild(1).position);
         }
+        else if(col.tag == "Room")
+        {
+            if (transform.parent.tag == "Player")
+            {
+                transform.parent.GetComponent<PlayerMove>().CurrentRoom = col.gameObject;
+            }
+            else if(transform.parent.tag == "Enemy")
+            {
+                transform.parent.GetComponent<EnemyAI>().CurrentRoom = col.gameObject;
+            }
+        }
     }
 }

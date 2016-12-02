@@ -13,7 +13,7 @@ public class PlayerMove : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         rb = GetComponent<Rigidbody2D>();
-        MoveSpeed = 2.0f;
+        
 	}
 	
 	// Update is called once per frame

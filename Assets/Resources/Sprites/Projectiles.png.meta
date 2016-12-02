@@ -1,11 +1,11 @@
 fileFormatVersion: 2
-guid: cd376fd37b3fbf448b5d958d25e7cddc
-timeCreated: 1480522558
+guid: f92f3d18e56c3fd4f9b50627029624b3
+timeCreated: 1480564630
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: Haunted Grove_0
-    21300002: tree
+    21300000: Projectiles_0
+    21300002: Explosion1
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -55,26 +55,26 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Haunted Grove_0
+      name: Projectiles_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 512
-        height: 512
+        x: 18
+        y: 24
+        width: 16
+        height: 16
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: tree
+      name: Explosion1
       rect:
         serializedVersion: 2
-        x: 304
-        y: 255
-        width: 65
-        height: 81
+        x: 41
+        y: 8
+        width: 30
+        height: 31
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
