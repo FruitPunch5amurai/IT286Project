@@ -96,6 +96,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1000013049910738
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 4000011843859036}
+  - 114: {fileID: 114000011082538330}
+  m_Layer: 0
+  m_Name: KeySpawn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1000013150071992
 GameObject:
   m_ObjectHideFlags: 1
@@ -137,6 +153,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4000012967303622}
   m_RootOrder: 1
+--- !u!4 &4000011843859036
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013049910738}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.38, y: -0.42, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Children: []
+  m_Father: {fileID: 4000012070579214}
+  m_RootOrder: 3
 --- !u!4 &4000012070579214
 Transform:
   m_ObjectHideFlags: 1
@@ -151,6 +180,7 @@ Transform:
   - {fileID: 4000010229789252}
   - {fileID: 4000012967303622}
   - {fileID: 4000012679350164}
+  - {fileID: 4000011843859036}
   m_Father: {fileID: 0}
   m_RootOrder: 0
 --- !u!4 &4000012679350164
@@ -280,10 +310,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ListOfEnemies:
   - {fileID: 1000011694525368, guid: 784c8980dbff2e346b2e79e36fba5ba9, type: 2}
-  - {fileID: 1000010907435496, guid: a10e459b6ec570040932af916b555583, type: 2}
-  - {fileID: 1000010076840742, guid: 348f8b6932f08f54c85ae9b319d59046, type: 2}
-  AmountOfEnemies: 010000000100000001000000
+  AmountOfEnemies: 01000000
   GenerateRandomAmount: 0
+--- !u!114 &114000011082538330
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013049910738}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81460defb7f26b04d88e896b1dffb90c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114000011509904156
 MonoBehaviour:
   m_ObjectHideFlags: 1

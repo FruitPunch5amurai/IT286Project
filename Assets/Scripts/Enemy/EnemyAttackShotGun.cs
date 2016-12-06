@@ -1,17 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class EnemyAttackB : EnemyAttack {
+public class EnemyAttackShotGun : EnemyAttack {
 
     private float m_CurrentBulletAngle;
     public int BulletAmount;
-	// Use this for initialization
-	protected override void Start () {
+    public float Spread;
+    // Use this for initialization
+    protected override void Start()
+    {
         base.Start();
-	}
-	
-	// Update is called once per frame
-	protected override void FixedUpdate() {
+    }
+
+    // Update is called once per frame
+    protected override void FixedUpdate()
+    {
         base.FixedUpdate();
         if (m_timeUntilCanAttack <= Time.time)
         {
@@ -24,7 +27,7 @@ public class EnemyAttackB : EnemyAttack {
                 for (int i = 0; i < BulletAmount; i++)
                 {
                     GameObject bullet;
-                    m_CurrentBulletAngle = (1 / Mathf.Tan(dir.y / dir.x)) - i * 5;
+                    m_CurrentBulletAngle = (1 / Mathf.Tan(dir.y / dir.x)) - i * Spread;
                     Vector3 secondDir = Quaternion.AngleAxis(m_CurrentBulletAngle + 20, Vector3.forward) * dir;
 
                     bullet = (GameObject)Instantiate(Bullet, transform.position, Quaternion.identity);

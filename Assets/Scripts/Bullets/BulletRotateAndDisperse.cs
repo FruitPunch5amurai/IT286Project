@@ -8,7 +8,7 @@ public class BulletRotateAndDisperse : MonoBehaviour
     public float DisperseTime;
     public float Speed;
     private float TimeUntilDisperse;
-    private Transform[] children;
+    public Transform[] children;
     public Vector3 rotationMask = new Vector3(0,0, 1); //which axes to rotate around
     public float rotationSpeed; //degrees per second
 
@@ -16,6 +16,7 @@ public class BulletRotateAndDisperse : MonoBehaviour
     {
         TimeUntilDisperse = Time.time + DisperseTime;
         children = transform.GetComponentsInChildren<Transform>();
+
     }
 
     // Update is called once per frame
@@ -25,19 +26,27 @@ public class BulletRotateAndDisperse : MonoBehaviour
         {
             foreach (Transform child in children)
             {
-                Vector3 dir = -(transform.position - child.position).normalized;
-                child.GetComponent<Rigidbody2D>().AddForce(dir*Speed*Time.deltaTime, ForceMode2D.Impulse);
+                if (child != null)
+                {
+                    Vector3 dir = -(transform.position - child.position).normalized;
+                    child.Translate(new Vector3(dir.x * Speed, dir.y * Speed, 0) * Time.deltaTime);
+                }
             }
         }
-            
         else
         {
             foreach (Transform child in children)
             {
-                if (child != transform)
-                    child.position = Quaternion.Euler(0, 0, rotationSpeed * Time.deltaTime) * (child.position - transform.position) + transform.position;
+                if (child != null)
+                {
+                    if (child.name == "SpinningProjectile(Clone)")
+                    {
+                        Debug.Log("YEP");
+                    }
+                    else if (child != transform)
+                        child.position = Quaternion.Euler(0, 0, rotationSpeed * Time.deltaTime) * (child.position - transform.position) + transform.position;
+                }
             }
         }
-
     }
 }

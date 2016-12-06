@@ -16,7 +16,7 @@ MonoBehaviour:
     Max: 10
   GlobalPropGroupIDs: 
   GlobalPropRanges: []
-  KeyManager: {fileID: 0}
+  KeyManager: {fileID: 11400000, guid: 6d080c41f766f2444ab2c269706fb7cd, type: 2}
   DoorwayConnectionChance: 0
   TileInjectionRules: []
   Nodes:
@@ -26,9 +26,17 @@ MonoBehaviour:
     NodeType: 1
     Position: 0
     Label: Start
-    Keys: []
-    Locks: []
-    LockPlacement: 0
+    Keys:
+    - ID: 0
+      Range:
+        Min: 0
+        Max: 1
+    Locks:
+    - ID: 0
+      Range:
+        Min: 0
+        Max: 1
+    LockPlacement: -1
   - Graph: {fileID: 11400000}
     TileSets:
     - {fileID: 11400000, guid: 1a936fa94085ac54285bb52384e4fac2, type: 2}
@@ -44,5 +52,13 @@ MonoBehaviour:
     - {fileID: 11400000, guid: b5bd85c090bdd9a469874b706facd036, type: 2}
     Position: 0
     Length: 1
-    Keys: []
-    Locks: []
+    Keys:
+    - ID: 0
+      Range:
+        Min: 0
+        Max: 1
+    Locks:
+    - ID: 0
+      Range:
+        Min: 1
+        Max: 1

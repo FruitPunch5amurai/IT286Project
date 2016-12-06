@@ -1,16 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class EnemyAttackA : EnemyAttack {
-
+public class EnemyAttackRayCast : EnemyAttack {
     public LayerMask RaycastIgnore;
-	// Use this for initialization
-	protected override void Start () {
+    // Use this for initialization
+    protected override void Start()
+    {
         base.Start();
-	}
-	
-	// Update is called once per frame
-	protected override void FixedUpdate () {
+    }
+
+    // Update is called once per frame
+    protected override void FixedUpdate()
+    {
         base.FixedUpdate();
         if (m_timeUntilCanAttack <= Time.time)
         {
@@ -27,7 +28,7 @@ public class EnemyAttackA : EnemyAttack {
                     if (ray.collider.tag == "Player")
                     {
                         //Attack goes here
-                        GameObject iBullet = (GameObject)Instantiate(Bullet,transform.position,Quaternion.identity);
+                        GameObject iBullet = (GameObject)Instantiate(Bullet, transform.position, Quaternion.identity);
                         iBullet.GetComponent<Rigidbody2D>().AddForce(dis.normalized * BulletSpeed * Time.deltaTime, ForceMode2D.Impulse);
 
                     }

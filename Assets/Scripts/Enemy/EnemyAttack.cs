@@ -6,6 +6,7 @@ public abstract class EnemyAttack : MonoBehaviour {
     public float AttackInterval;
 
     protected EnemyAI m_EnemyAI;
+    protected GameObject m_Player;
     protected float m_timeUntilCanAttack;
     protected Vector3 m_dir;
     protected RaycastHit2D ray;
@@ -17,6 +18,7 @@ public abstract class EnemyAttack : MonoBehaviour {
     // Use this for initialization
     protected virtual void Start () {
         m_EnemyAI = GetComponent<EnemyAI>();
+        m_Player = GameManager.singleton.Player;
         m_ingnoreLayer = ~m_ingnoreLayer;
     }
 
