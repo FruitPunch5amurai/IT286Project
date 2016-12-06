@@ -4,7 +4,6 @@ using System.Threading;
 using System.Collections;
 
 [RequireComponent (typeof (Rigidbody2D))]
-[RequireComponent(typeof(Seeker))]
 public abstract class EnemyAI : MonoBehaviour {
 
     public float Speed;

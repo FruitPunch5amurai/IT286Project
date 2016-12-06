@@ -6,6 +6,7 @@ public class PlayerControl : MonoBehaviour
 
     public float moveSpeed = 2.0f;
     public bool hasControl = true;
+    public LayerMask RayCastIgnore;
     public GameObject WeaponController;
 
     public GameObject CurrentRoom;
@@ -70,19 +71,19 @@ public class PlayerControl : MonoBehaviour
         RaycastHit2D move2;
         if (input.x < 0)
         {
-            move2 = Physics2D.Raycast(transform.position, new Vector2(input.x, 0), input.x, ~(1 << 8));
+            move2 = Physics2D.Raycast(transform.position, new Vector2(input.x, 0), input.x, ~RayCastIgnore);
         }
         else
         {
-            move2 = Physics2D.Raycast(transform.position, new Vector2(input.x, 0), input.x, ~(1 << 8));
+            move2 = Physics2D.Raycast(transform.position, new Vector2(input.x, 0), input.x, ~RayCastIgnore);
         }
         if (input.x < 0)
         {
-            move = Physics2D.BoxCast(transform.position + Camera.main.transform.right * GetComponent<BoxCollider2D>().size.x * -1, GetComponent<BoxCollider2D>().size, 360, new Vector2(input.x, 0), input.x, ~(1 << 8));
+            move = Physics2D.BoxCast(transform.position + Camera.main.transform.right * GetComponent<BoxCollider2D>().size.x * -1, GetComponent<BoxCollider2D>().size, 360, new Vector2(input.x, 0), input.x, ~RayCastIgnore);
         }
         else
         {
-            move = Physics2D.BoxCast(transform.position + Camera.main.transform.right * GetComponent<BoxCollider2D>().size.x * 1, GetComponent<BoxCollider2D>().size, 360, new Vector2(input.x, 0), input.x, ~(1 << 8));
+            move = Physics2D.BoxCast(transform.position + Camera.main.transform.right * GetComponent<BoxCollider2D>().size.x * 1, GetComponent<BoxCollider2D>().size, 360, new Vector2(input.x, 0), input.x, ~RayCastIgnore);
         }
         if (!move2)
         {
@@ -94,19 +95,19 @@ public class PlayerControl : MonoBehaviour
 
         if (input.y < 0)
         {
-            move2 = Physics2D.Raycast(transform.position, new Vector2(0, input.y), input.y, ~(1 << 8));
+            move2 = Physics2D.Raycast(transform.position, new Vector2(0, input.y), input.y, ~RayCastIgnore);
         }
         else
         {
-            move2 = Physics2D.Raycast(transform.position, new Vector2(0, input.y), input.y, ~(1 << 8));
+            move2 = Physics2D.Raycast(transform.position, new Vector2(0, input.y), input.y, ~RayCastIgnore);
         }
         if (input.y < 0)
         {
-            move = Physics2D.BoxCast(transform.position + Camera.main.transform.up * GetComponent<BoxCollider2D>().size.y * -1, GetComponent<BoxCollider2D>().size, 360, new Vector2(0, input.y), input.y, ~(1 << 8));
+            move = Physics2D.BoxCast(transform.position + Camera.main.transform.up * GetComponent<BoxCollider2D>().size.y * -1, GetComponent<BoxCollider2D>().size, 360, new Vector2(0, input.y), input.y, ~RayCastIgnore);
         }
         else
         {
-            move = Physics2D.BoxCast(transform.position + Camera.main.transform.up * GetComponent<BoxCollider2D>().size.y * 1, GetComponent<BoxCollider2D>().size, 360, new Vector2(0, input.y), input.y, ~(1 << 8));
+            move = Physics2D.BoxCast(transform.position + Camera.main.transform.up * GetComponent<BoxCollider2D>().size.y * 1, GetComponent<BoxCollider2D>().size, 360, new Vector2(0, input.y), input.y, ~RayCastIgnore);
         }
         if (!move2)
         {

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour {
 
@@ -13,6 +14,10 @@ public class GameManager : MonoBehaviour {
     public GameObject AStarGrid;
     public List<GameObject> CurrentRoomEnemies;
     public List<GameObject> PathRequests;
+
+    public Image Key;
+    private Vector3 SpawnPosition;
+    public bool HasBossKey;
 
 
     public enum GameState
@@ -45,7 +50,8 @@ public class GameManager : MonoBehaviour {
 
     void Start ()
     {
-
+        HasBossKey = false;
+        Key.enabled = false;
 	}
 	
 	// Update is called once per frame
@@ -97,6 +103,7 @@ public class GameManager : MonoBehaviour {
         PlayerControl pm = Player.GetComponent<PlayerControl>();
         RemoveEnemiesFromRoom(pm.CurrentRoom);
         pm.CurrentRoom = Room;
+        SpawnPosition = NewPosition;
         Player.transform.position = new Vector3(NewPosition.x, NewPosition.y, -.001f);
         Camera.main.GetComponent<CameraMove>().SetCameraBoundary();
         AdjustAStarGridToRoom(Room);
@@ -161,6 +168,13 @@ public class GameManager : MonoBehaviour {
         //StartCoroutine(ProcessPathRequests());
     }
 
-
+    /*
+     *Adds a Boss key 
+     */
+     public void GiveBossKey(bool k)
+    {
+        Key.enabled = k;
+        HasBossKey = k;
+    }
 }
 

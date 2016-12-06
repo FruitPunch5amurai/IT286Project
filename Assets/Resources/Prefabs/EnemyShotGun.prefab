@@ -24,9 +24,9 @@ GameObject:
   - 50: {fileID: 50000011619902916}
   - 61: {fileID: 61000012300622136}
   - 114: {fileID: 114000012840984574}
-  - 114: {fileID: 114000012098233234}
+  - 114: {fileID: 114000011193010786}
   m_Layer: 8
-  m_Name: EnemyB
+  m_Name: EnemyShotGun
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -162,6 +162,23 @@ MonoBehaviour:
     tagsChange: -1
     tagsSet: -1
   tagPenalties: 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+--- !u!114 &114000011193010786
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000010907435496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e8b79de6a9aa5949ada5dfaf3bc2c8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AttackInterval: 2
+  Bullet: {fileID: 1000013656762666, guid: fc0d57444ce4a9541a8fcd50f2bc0021, type: 2}
+  BulletSpeed: 40
+  Target: {fileID: 0}
+  BulletAmount: 6
+  Spread: 20
 --- !u!114 &114000011796993074
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -173,22 +190,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec243b804ea94194484ff473fa2bf221, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114000012098233234
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010907435496}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f3d0b9d9eb0dbd43b2e533d2dc561d3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  AttackInterval: 0.8
-  Bullet: {fileID: 1000013656762666, guid: fc0d57444ce4a9541a8fcd50f2bc0021, type: 2}
-  BulletSpeed: 90
-  Target: {fileID: 0}
-  BulletAmount: 6
 --- !u!114 &114000012840984574
 MonoBehaviour:
   m_ObjectHideFlags: 1
