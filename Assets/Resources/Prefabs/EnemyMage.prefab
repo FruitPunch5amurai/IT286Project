@@ -16,12 +16,12 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000011679812422}
-  - 54: {fileID: 54000010947664284}
-  - 65: {fileID: 65000010844104800}
-  - 114: {fileID: 114000010187198298}
+  - component: {fileID: 4000011679812422}
+  - component: {fileID: 54000010947664284}
+  - component: {fileID: 65000010844104800}
+  - component: {fileID: 114000010187198298}
   m_Layer: 8
   m_Name: RoomCollider
   m_TagString: Untagged
@@ -34,15 +34,16 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000010124393700}
-  - 212: {fileID: 212000010713252808}
-  - 114: {fileID: 114000010107236934}
-  - 50: {fileID: 50000013992913952}
-  - 61: {fileID: 61000010733521634}
-  - 114: {fileID: 114000013837875018}
-  - 114: {fileID: 114000013079449380}
+  - component: {fileID: 4000010124393700}
+  - component: {fileID: 212000010713252808}
+  - component: {fileID: 114000010107236934}
+  - component: {fileID: 50000013992913952}
+  - component: {fileID: 61000010733521634}
+  - component: {fileID: 114000013837875018}
+  - component: {fileID: 114000013079449380}
+  - component: {fileID: 114343336177651238}
   m_Layer: 8
   m_Name: EnemyMage
   m_TagString: Enemy
@@ -59,11 +60,11 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 4000011679812422}
   m_Father: {fileID: 0}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4000011679812422
 Transform:
   m_ObjectHideFlags: 1
@@ -73,23 +74,26 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 4000010124393700}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &50000013992913952
 Rigidbody2D:
-  serializedVersion: 2
+  serializedVersion: 4
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000011694525368}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDrag: 2
   m_AngularDrag: 0.05
   m_GravityScale: 0
-  m_IsKinematic: 0
+  m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
@@ -206,6 +210,18 @@ MonoBehaviour:
   Target: {x: 0, y: 0, z: 0}
   FMode: 0
   CurrentState: 0
+--- !u!114 &114343336177651238
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000011694525368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a3e2a6dc49d5424b937d3b890a8f6fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 10
 --- !u!212 &212000010713252808
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -220,7 +236,9 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 0
   m_Materials:
   - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  m_SubsetIndices: 
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
@@ -228,7 +246,7 @@ SpriteRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_SelectedWireframeHidden: 1
+  m_SelectedEditorRenderState: 0
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
