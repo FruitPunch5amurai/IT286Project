@@ -24,9 +24,10 @@ GameObject:
   - 61: {fileID: 61000011797807648}
   - 50: {fileID: 50000011216538572}
   - 95: {fileID: 95000011477768802}
-  m_Layer: 8
+  - 114: {fileID: 114000013461506098}
+  m_Layer: 12
   m_Name: Projectile
-  m_TagString: Untagged
+  m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -92,6 +93,20 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &114000013461506098
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013656762666}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24db71a4a6ad62749b84fa335da9521c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BulletType: 0
+  IsDeflectable: 1
+  Deflected: 0
 --- !u!114 &114000013827195924
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -104,6 +119,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   LifeTime: 2
+  m_dead: 0
+  m_timeUntilDie: 0
 --- !u!212 &212000010233507488
 SpriteRenderer:
   m_ObjectHideFlags: 1

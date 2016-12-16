@@ -9,11 +9,12 @@ public class BulletRotateAndDisperse : MonoBehaviour
     public float Speed;
     private float TimeUntilDisperse;
     public Transform[] children;
-    public Vector3 rotationMask = new Vector3(0,0, 1); //which axes to rotate around
+    private bool m_Dipsersed;
     public float rotationSpeed; //degrees per second
 
     void Start()
     {
+        m_Dipsersed = false;
         TimeUntilDisperse = Time.time + DisperseTime;
         children = transform.GetComponentsInChildren<Transform>();
 
@@ -22,29 +23,35 @@ public class BulletRotateAndDisperse : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (TimeUntilDisperse < Time.time)
+        if (TimeUntilDisperse < Time.time && m_Dipsersed == false)
         {
+            if (GetComponent<Rigidbody2D>())
+                Destroy(GetComponent<Rigidbody2D>());
+
             foreach (Transform child in children)
             {
-                if (child != null)
+                if (child != null && child != transform)
                 {
                     Vector3 dir = -(transform.position - child.position).normalized;
-                    child.Translate(new Vector3(dir.x * Speed, dir.y * Speed, 0) * Time.deltaTime);
+                    child.GetComponent<Rigidbody2D>().AddForce((new Vector3(dir.x * Speed, dir.y * Speed, 0) * Time.deltaTime), ForceMode2D.Impulse);
+
                 }
             }
+            m_Dipsersed = true;
         }
-        else
+        //Handle Rotation
+        else if (m_Dipsersed == false)
         {
             foreach (Transform child in children)
             {
                 if (child != null)
                 {
-                    if (child.name == "SpinningProjectile(Clone)")
+                    if (child != transform)
                     {
-                        Debug.Log("YEP");
-                    }
-                    else if (child != transform)
                         child.position = Quaternion.Euler(0, 0, rotationSpeed * Time.deltaTime) * (child.position - transform.position) + transform.position;
+                        //child.position = (child.position - transform.position) + transform.position;
+
+                    }
                 }
             }
         }

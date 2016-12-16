@@ -4,9 +4,10 @@ using System.Collections;
 public class BulletDie : MonoBehaviour {
 
     public float LifeTime;
-    private bool m_dead;
-    private float m_timeUntilDie;
-	// Use this for initialization
+    public bool m_dead;
+    public float m_timeUntilDie;
+    public bool IgnoreTerrain;
+    // Use this for initialization
 	void Start () {
         m_timeUntilDie = Time.time + LifeTime;
         m_dead = false;
@@ -34,7 +35,23 @@ public class BulletDie : MonoBehaviour {
     }
     void OnTriggerEnter2D(Collider2D col)
     {
-        Destroy();
+        Bullet b = GetComponent<Bullet>();
+        if (col.tag == "Enemy")
+        {
+            if (b)
+            {
+                if (b.Deflected)
+                {
+                    //Take Damage!
+
+                }
+            }
+            return;
+        }
+        else if (col.tag == "Terrain" && IgnoreTerrain)
+            return;
+        if(!m_dead == true)
+            Destroy();
     }
     void Destroy()
     {
@@ -43,7 +60,7 @@ public class BulletDie : MonoBehaviour {
         {
             GetComponent<Animator>().SetBool("Dead", m_dead);
             GetComponent<BoxCollider2D>().enabled = false;
-            StartCoroutine(DestroyBullet());
         }
+        StartCoroutine(DestroyBullet());
     }
 }
