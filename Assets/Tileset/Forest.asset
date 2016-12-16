@@ -13,19 +13,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TileWeights:
     Weights:
-    - Value: {fileID: 1000013063826680, guid: f532316f61fe0a9418cf5cc49816245d, type: 2}
+    - Value: {fileID: 1000010227138470, guid: 92b4ada6a2938844dbcd10136696aeba, type: 2}
       MainPathWeight: 1
       BranchPathWeight: 1
       UseDepthScale: 1
       DepthWeightScale:
         serializedVersion: 2
         m_Curve:
-        - time: 0
+        - serializedVersion: 2
+          time: 0
           value: 1
           inSlope: 0
           outSlope: 0
           tangentMode: 0
-        - time: 1
+        - serializedVersion: 2
+          time: 1
           value: 1
           inSlope: 0
           outSlope: 0
@@ -34,19 +36,21 @@ MonoBehaviour:
         m_PostInfinity: 2
         m_RotationOrder: 4
       TileSet: {fileID: 11400000}
-    - Value: {fileID: 1000010914125696, guid: a6e2b09b17e73ca4792142d09cd5a126, type: 2}
+    - Value: {fileID: 1000013063826680, guid: a346f4e8af04a7c4f8d0e41d42c07600, type: 2}
       MainPathWeight: 1
       BranchPathWeight: 1
       UseDepthScale: 1
       DepthWeightScale:
         serializedVersion: 2
         m_Curve:
-        - time: 0
+        - serializedVersion: 2
+          time: 0
           value: 1
           inSlope: 0
           outSlope: 0
           tangentMode: 0
-        - time: 1
+        - serializedVersion: 2
+          time: 1
           value: 1
           inSlope: 0
           outSlope: 0
@@ -67,12 +71,14 @@ MonoBehaviour:
         DepthWeightScale:
           serializedVersion: 2
           m_Curve:
-          - time: 0
+          - serializedVersion: 2
+            time: 0
             value: 1
             inSlope: 0
             outSlope: 0
             tangentMode: 0
-          - time: 1
+          - serializedVersion: 2
+            time: 1
             value: 1
             inSlope: 0
             outSlope: 0

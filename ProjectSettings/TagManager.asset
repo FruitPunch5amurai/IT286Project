@@ -10,6 +10,7 @@ TagManager:
   - Terrain
   - Weapon
   - Projectile
+  - Item
   layers:
   - Default
   - TransparentFX
@@ -23,11 +24,9 @@ TagManager:
   - Terrain
   - Dungeon
   - Items
-  - Bullets
+  - 
   - Pickups
   - Projectiles
-  - 
-  - 
   - 
   - 
   - 

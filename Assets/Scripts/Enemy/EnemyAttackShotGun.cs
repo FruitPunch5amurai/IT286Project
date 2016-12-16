@@ -16,7 +16,7 @@ public class EnemyAttackShotGun : EnemyAttack {
     protected override void FixedUpdate()
     {
         base.FixedUpdate();
-        if (m_timeUntilCanAttack <= Time.time)
+        if (m_timeUntilCanAttack <= Time.time && m_BulletManager.CheckIfCanBullet())
         {
             if (Target != null)
             {
@@ -31,6 +31,7 @@ public class EnemyAttackShotGun : EnemyAttack {
                     Vector3 secondDir = Quaternion.AngleAxis(m_CurrentBulletAngle + 20, Vector3.forward) * dir;
 
                     bullet = (GameObject)Instantiate(Bullet, transform.position, Quaternion.identity);
+                    m_BulletManager.Bullets.Add(bullet);
                     bullet.GetComponent<Rigidbody2D>().AddForce(secondDir.normalized * BulletSpeed * Time.deltaTime, ForceMode2D.Impulse);
                 }
                 m_timeUntilCanAttack = Time.time + AttackInterval;

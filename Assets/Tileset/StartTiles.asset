@@ -13,19 +13,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TileWeights:
     Weights:
-    - Value: {fileID: 1000012671784532, guid: 4cd72ed04ece66a4a83a36fce2f9a666, type: 2}
+    - Value: {fileID: 1000012671784532, guid: fa3f8a0d3c6966e4281b498e99713ab9, type: 2}
       MainPathWeight: 1
       BranchPathWeight: 1
       UseDepthScale: 1
       DepthWeightScale:
         serializedVersion: 2
         m_Curve:
-        - time: 0
+        - serializedVersion: 2
+          time: 0
           value: 1
           inSlope: 0
           outSlope: 0
           tangentMode: 0
-        - time: 1
+        - serializedVersion: 2
+          time: 1
           value: 1
           inSlope: 0
           outSlope: 0
@@ -46,12 +48,14 @@ MonoBehaviour:
         DepthWeightScale:
           serializedVersion: 2
           m_Curve:
-          - time: 0
+          - serializedVersion: 2
+            time: 0
             value: 1
             inSlope: 0
             outSlope: 0
             tangentMode: 0
-          - time: 1
+          - serializedVersion: 2
+            time: 1
             value: 1
             inSlope: 0
             outSlope: 0

@@ -8,6 +8,7 @@ public abstract class EnemyAttack : MonoBehaviour {
     protected EnemyAI m_EnemyAI;
     protected GameObject m_Player;
     protected float m_timeUntilCanAttack;
+    protected BulletManager m_BulletManager;
     protected Vector3 m_dir;
     protected RaycastHit2D ray;
     protected bool m_hit;
@@ -20,6 +21,7 @@ public abstract class EnemyAttack : MonoBehaviour {
         m_EnemyAI = GetComponent<EnemyAI>();
         m_Player = GameManager.singleton.Player;
         m_ingnoreLayer = ~m_ingnoreLayer;
+        m_BulletManager = GameManager.singleton.BulletManager.GetComponent<BulletManager>();
     }
 
     // Update is called once per frame
