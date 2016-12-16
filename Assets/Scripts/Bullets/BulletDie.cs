@@ -1,13 +1,13 @@
+
 ﻿using UnityEngine;
 using System.Collections;
 
 public class BulletDie : MonoBehaviour {
 
     public float LifeTime;
-    public bool m_dead;
-    public float m_timeUntilDie;
-    public bool IgnoreTerrain;
-    // Use this for initialization
+    private bool m_dead;
+    private float m_timeUntilDie;
+	// Use this for initialization
 	void Start () {
         m_timeUntilDie = Time.time + LifeTime;
         m_dead = false;
@@ -35,23 +35,37 @@ public class BulletDie : MonoBehaviour {
     }
     void OnTriggerEnter2D(Collider2D col)
     {
-        Bullet b = GetComponent<Bullet>();
-        if (col.tag == "Enemy")
+        //Don't die from deflections
+        if (col.tag == "Weapon")
         {
-            if (b)
+        }
+        //Hit the player
+        else if (col.tag == "Player")
+        {
+            if (GetComponent<SpriteRenderer>())
             {
-                if (b.Deflected)
+                if (GetComponent<SpriteRenderer>().color != Color.yellow)
                 {
-                    //Take Damage!
-
+                    col.GetComponent<PlayerControl>().DamagePlayer();
                 }
             }
-            return;
-        }
-        else if (col.tag == "Terrain" && IgnoreTerrain)
-            return;
-        if(!m_dead == true)
             Destroy();
+        }
+        //Handle friendly fire
+        else if (col.tag == "Enemy") {
+            if (GetComponent<SpriteRenderer>())
+            {
+                if (GetComponent<SpriteRenderer>().color == Color.yellow)
+                {
+                    col.GetComponent<EnemyHealth>().getHit(4, Vector2.zero);
+                    Destroy();
+                }
+            }
+        }
+        //Hit a wall or something
+        else {
+            Destroy();
+        }
     }
     void Destroy()
     {
@@ -60,7 +74,7 @@ public class BulletDie : MonoBehaviour {
         {
             GetComponent<Animator>().SetBool("Dead", m_dead);
             GetComponent<BoxCollider2D>().enabled = false;
+            StartCoroutine(DestroyBullet());
         }
-        StartCoroutine(DestroyBullet());
     }
 }
