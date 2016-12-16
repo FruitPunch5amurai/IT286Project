@@ -8,6 +8,8 @@ TagManager:
   - RoomDoor
   - Enemy
   - Terrain
+  - Weapon
+  - Projectile
   layers:
   - Default
   - TransparentFX
@@ -20,8 +22,10 @@ TagManager:
   - Enemies
   - Terrain
   - Dungeon
-  - 
-  - 
+  - Items
+  - Bullets
+  - Pickups
+  - Projectiles
   - 
   - 
   - 

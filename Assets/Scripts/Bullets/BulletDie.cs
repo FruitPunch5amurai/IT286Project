@@ -1,3 +1,4 @@
+
 ﻿using UnityEngine;
 using System.Collections;
 
@@ -34,7 +35,37 @@ public class BulletDie : MonoBehaviour {
     }
     void OnTriggerEnter2D(Collider2D col)
     {
-        Destroy();
+        //Don't die from deflections
+        if (col.tag == "Weapon")
+        {
+        }
+        //Hit the player
+        else if (col.tag == "Player")
+        {
+            if (GetComponent<SpriteRenderer>())
+            {
+                if (GetComponent<SpriteRenderer>().color != Color.yellow)
+                {
+                    col.GetComponent<PlayerControl>().DamagePlayer();
+                }
+            }
+            Destroy();
+        }
+        //Handle friendly fire
+        else if (col.tag == "Enemy") {
+            if (GetComponent<SpriteRenderer>())
+            {
+                if (GetComponent<SpriteRenderer>().color == Color.yellow)
+                {
+                    col.GetComponent<EnemyHealth>().getHit(4, Vector2.zero);
+                    Destroy();
+                }
+            }
+        }
+        //Hit a wall or something
+        else {
+            Destroy();
+        }
     }
     void Destroy()
     {

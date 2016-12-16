@@ -19,7 +19,7 @@ public class EnemyA :EnemyAI{
         base.FixedUpdate();
         if (path == null)
         {
-            Debug.Log("AI:Path is null");
+            //Debug.Log("AI:Path is null");
             return;
         }
         //define Attack behavior

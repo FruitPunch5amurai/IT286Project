@@ -21,7 +21,7 @@ public class EnemyAttackNoRayCast : EnemyAttack {
                     - transform.position);
                  //Attack goes here
                  GameObject iBullet = (GameObject)Instantiate(Bullet, transform.position, Quaternion.identity);
-                 iBullet.GetComponent<Rigidbody2D>().AddForce(dis.normalized * BulletSpeed * Time.deltaTime, ForceMode2D.Impulse);
+                 iBullet.GetComponent<Rigidbody2D>().AddForce(dis.normalized * BulletSpeed * Time.deltaTime, ForceMode2D.Force);
                  m_timeUntilCanAttack = Time.time + AttackInterval;
             }
         }
