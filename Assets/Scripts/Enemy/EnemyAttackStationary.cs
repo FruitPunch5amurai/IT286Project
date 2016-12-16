@@ -15,7 +15,7 @@ public class EnemyAttackStationary : EnemyAttack {
 	protected override void FixedUpdate () {
         base.FixedUpdate();
 
-        if (m_timeUntilCanAttack <= Time.time)
+        if (m_timeUntilCanAttack <= Time.time && m_BulletManager.CheckIfCanBullet())
         {
             if (!AssignedTarget)
             {
@@ -27,7 +27,7 @@ public class EnemyAttackStationary : EnemyAttack {
                         - transform.position);
 
                     GameObject iBullet = (GameObject)Instantiate(Bullet, transform.position, Quaternion.identity);
-
+                    m_BulletManager.Bullets.Add(iBullet);
                     iBullet.GetComponent<Rigidbody2D>().AddForce(dir.normalized * BulletSpeed * Time.deltaTime, ForceMode2D.Impulse);
 
                     m_timeUntilCanAttack = Time.time + AttackInterval;

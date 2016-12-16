@@ -16,16 +16,16 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000014089816154}
-  - 212: {fileID: 212000013669175108}
-  - 114: {fileID: 114000010485450658}
-  - 50: {fileID: 50000012539466062}
-  - 61: {fileID: 61000011298848316}
-  - 114: {fileID: 114000010721825680}
-  - 114: {fileID: 114000012353033150}
-  - 114: {fileID: 114000010775719088}
+  - component: {fileID: 4000014089816154}
+  - component: {fileID: 212000013669175108}
+  - component: {fileID: 114000010485450658}
+  - component: {fileID: 50000012539466062}
+  - component: {fileID: 61000011298848316}
+  - component: {fileID: 114000010721825680}
+  - component: {fileID: 114000012353033150}
+  - component: {fileID: 114000010775719088}
   m_Layer: 8
   m_Name: EnemySingleShooter
   m_TagString: Enemy
@@ -38,12 +38,12 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000011485227798}
-  - 54: {fileID: 54000010049642234}
-  - 65: {fileID: 65000013407856306}
-  - 114: {fileID: 114000011329273814}
+  - component: {fileID: 4000011485227798}
+  - component: {fileID: 54000010049642234}
+  - component: {fileID: 65000013407856306}
+  - component: {fileID: 114000011329273814}
   m_Layer: 8
   m_Name: RoomCollider
   m_TagString: Untagged
@@ -60,10 +60,10 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 4000014089816154}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4000014089816154
 Transform:
   m_ObjectHideFlags: 1
@@ -73,24 +73,27 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.5313655, y: 0.57181734, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 4000011485227798}
   m_Father: {fileID: 0}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &50000012539466062
 Rigidbody2D:
-  serializedVersion: 2
+  serializedVersion: 4
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000010076840742}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDrag: 2
   m_AngularDrag: 0.05
   m_GravityScale: 0
-  m_IsKinematic: 0
+  m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
@@ -218,12 +221,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AttackInterval: 2
-  Bullet: {fileID: 1000013656762666, guid: fc0d57444ce4a9541a8fcd50f2bc0021, type: 2}
+  Bullet: {fileID: 1596976256106302, guid: 3d8650ffbd470644882cbe20a0daff15, type: 2}
   BulletSpeed: 50
   Target: {fileID: 0}
   RaycastIgnore:
     serializedVersion: 2
-    m_Bits: 5124
+    m_Bits: 32004
 --- !u!212 &212000013669175108
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -238,7 +241,9 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 0
   m_Materials:
   - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  m_SubsetIndices: 
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
@@ -246,7 +251,7 @@ SpriteRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_SelectedWireframeHidden: 1
+  m_SelectedEditorRenderState: 0
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89

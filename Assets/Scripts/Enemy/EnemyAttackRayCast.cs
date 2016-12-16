@@ -13,7 +13,7 @@ public class EnemyAttackRayCast : EnemyAttack {
     protected override void FixedUpdate()
     {
         base.FixedUpdate();
-        if (m_timeUntilCanAttack <= Time.time)
+        if (m_timeUntilCanAttack <= Time.time && m_BulletManager.CheckIfCanBullet())
         {
             if (m_EnemyAI.CurrentState == EnemyAI.State.Attack)
             {
@@ -29,8 +29,8 @@ public class EnemyAttackRayCast : EnemyAttack {
                     {
                         //Attack goes here
                         GameObject iBullet = (GameObject)Instantiate(Bullet, transform.position, Quaternion.identity);
-                        iBullet.GetComponent<Rigidbody2D>().AddForce(dis.normalized * BulletSpeed * Time.deltaTime, ForceMode2D.Force);
-
+                        iBullet.GetComponent<Rigidbody2D>().AddForce(dis.normalized * BulletSpeed * Time.deltaTime, ForceMode2D.Impulse);
+                        m_BulletManager.Bullets.Add(iBullet);
                     }
                 }
                 m_timeUntilCanAttack = Time.time + AttackInterval;

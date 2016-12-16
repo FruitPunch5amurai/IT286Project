@@ -1,5 +1,4 @@
-
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class BulletDie : MonoBehaviour {
@@ -31,12 +30,20 @@ public class BulletDie : MonoBehaviour {
         }
 
         yield return new WaitForSeconds(.25f);
+        try
+        {
+            GameManager.singleton.BulletManager.GetComponent<BulletManager>().Bullets.Remove(gameObject);
+        }
+        catch
+        {
+            Debug.Log("Bullet is Not in BulletList");
+        }
         Destroy(gameObject);
     }
     void OnTriggerEnter2D(Collider2D col)
     {
         //Don't die from deflections
-        if (col.tag == "Weapon")
+        if (col.tag == "Weapon" || col.tag == "Item")
         {
         }
         //Hit the player
@@ -74,7 +81,8 @@ public class BulletDie : MonoBehaviour {
         {
             GetComponent<Animator>().SetBool("Dead", m_dead);
             GetComponent<BoxCollider2D>().enabled = false;
-            StartCoroutine(DestroyBullet());
+            
         }
+        StartCoroutine(DestroyBullet());
     }
 }
