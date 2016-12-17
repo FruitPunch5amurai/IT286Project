@@ -20,12 +20,31 @@ GameObject:
   m_Component:
   - component: {fileID: 4679005298446950}
   - component: {fileID: 212109079596938846}
-  - component: {fileID: 114982751290598112}
   - component: {fileID: 61308077593010344}
   - component: {fileID: 50516040068137558}
+  - component: {fileID: 114905524338209236}
+  - component: {fileID: 114826933591360580}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1333734284873384
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4727931899559888}
+  - component: {fileID: 65018078572016744}
+  - component: {fileID: 114056941398249486}
+  - component: {fileID: 54497041580724620}
+  m_Layer: 0
+  m_Name: RoomCollider
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -38,9 +57,9 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4253704244486730}
-  - component: {fileID: 114825475127913876}
   - component: {fileID: 61685524978879982}
-  m_Layer: 0
+  - component: {fileID: 114367074885960412}
+  m_Layer: 2
   m_Name: weaponCont
   m_TagString: Weapon
   m_Icon: {fileID: 0}
@@ -67,12 +86,26 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1099645228561196}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.1156325, y: -0.5113673, z: 0.26}
-  m_LocalScale: {x: 3.11755, y: 3.1175485, z: 3.1175485}
+  m_LocalPosition: {x: 0.498447, y: 0.0017771721, z: 0.26}
+  m_LocalScale: {x: 1.0089582, y: 1.0089574, z: 1.0089574}
   m_Children:
   - {fileID: 4253704244486730}
+  - {fileID: 4727931899559888}
   m_Father: {fileID: 0}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4727931899559888
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1333734284873384}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.095763154, y: 0.09576324, z: 0.09576324}
+  m_Children: []
+  m_Father: {fileID: 4679005298446950}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &50516040068137558
 Rigidbody2D:
@@ -81,7 +114,7 @@ Rigidbody2D:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1099645228561196}
-  m_BodyType: 1
+  m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -94,6 +127,21 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!54 &54497041580724620
+Rigidbody:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1333734284873384}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!61 &61308077593010344
 BoxCollider2D:
   m_ObjectHideFlags: 1
@@ -122,7 +170,30 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0.12}
   serializedVersion: 2
   m_Size: {x: 0.31, y: 0.36}
---- !u!114 &114825475127913876
+--- !u!65 &65018078572016744
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1333734284873384}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.58, y: 0.86, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &114056941398249486
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1333734284873384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec243b804ea94194484ff473fa2bf221, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &114367074885960412
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -130,18 +201,30 @@ MonoBehaviour:
   m_GameObject: {fileID: 1356193163971162}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 699498aa28a649144be9c42a949d081a, type: 3}
+  m_Script: {fileID: 11500000, guid: 25c64039164384d47b5e71f0c3f4afcc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   weaponState: idle
-  followDelay: 2
-  followDistance: 1
-  basicOffset: {x: 0, y: 0.4}
+  curWeapon: {fileID: 0}
+  followDelay: 0.5
+  followDistance: 2
+  basicOffset: {x: 0, y: 0}
   specialOffset: {x: 0, y: 0}
   specialStart: {x: 1, y: 1, z: 0}
-  transitionSpeed: 0.5
-  basicSwingSpeed: 5
---- !u!114 &114982751290598112
+  transitionSpeed: 1
+  basicSwingSpeed: 0
+--- !u!114 &114826933591360580
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1099645228561196}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a038c3b4e088739449bc2e54afdcfef0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &114905524338209236
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -155,17 +238,17 @@ MonoBehaviour:
   health: 6
   recoveryTime: 0.8
   lastDmg: 0
-  moveSpeed: 5
+  moveSpeed: 3
   hasControl: 1
   invincible: 0
   RayCastIgnore:
     serializedVersion: 2
-    m_Bits: 4294965704
+    m_Bits: 28416
   WeaponController: {fileID: 1356193163971162}
   CurrentRoom: {fileID: 0}
-  n: {fileID: 21300004, guid: 71c3c07de7e5fcd4cad2eeea5eb368b6, type: 3}
-  e: {fileID: 21300002, guid: 71c3c07de7e5fcd4cad2eeea5eb368b6, type: 3}
-  s: {fileID: 21300000, guid: 71c3c07de7e5fcd4cad2eeea5eb368b6, type: 3}
+  n: {fileID: 21300004, guid: f66206d724984d84dadce8e5004a6af0, type: 3}
+  e: {fileID: 21300002, guid: f66206d724984d84dadce8e5004a6af0, type: 3}
+  s: {fileID: 21300000, guid: f66206d724984d84dadce8e5004a6af0, type: 3}
   orientation: 
 --- !u!212 &212109079596938846
 SpriteRenderer:
@@ -198,7 +281,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 71c3c07de7e5fcd4cad2eeea5eb368b6, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f66206d724984d84dadce8e5004a6af0, type: 3}
   m_Color: {r: 0.9852941, g: 0.9852941, b: 0.9852941, a: 1}
   m_FlipX: 0
   m_FlipY: 0

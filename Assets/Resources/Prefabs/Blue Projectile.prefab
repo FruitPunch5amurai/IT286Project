@@ -20,11 +20,11 @@ GameObject:
   m_Component:
   - component: {fileID: 4394567775638382}
   - component: {fileID: 212602918720159000}
-  - component: {fileID: 114113309205283792}
   - component: {fileID: 61831777711314770}
   - component: {fileID: 50955910767980892}
   - component: {fileID: 95650465943083930}
-  m_Layer: 8
+  - component: {fileID: 114634878496375100}
+  m_Layer: 14
   m_Name: Blue Projectile
   m_TagString: Projectile
   m_Icon: {fileID: 0}
@@ -95,7 +95,7 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!114 &114113309205283792
+--- !u!114 &114634878496375100
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -106,7 +106,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2c568014a70c7c4087727889ac6ca29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LifeTime: 3600
+  LifeTime: 3
 --- !u!212 &212602918720159000
 SpriteRenderer:
   m_ObjectHideFlags: 1

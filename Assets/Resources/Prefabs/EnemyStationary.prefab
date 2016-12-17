@@ -195,7 +195,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AttackInterval: 1
   Bullet: {fileID: 1000013656762666, guid: fc0d57444ce4a9541a8fcd50f2bc0021, type: 2}
-  BulletSpeed: 70
+  BulletSpeed: 200
   Target: {fileID: 0}
   AssignedTarget: 0
   MaxDistance: 1.2
