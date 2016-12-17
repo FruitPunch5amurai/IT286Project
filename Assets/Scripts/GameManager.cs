@@ -2,8 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
-
+using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour {
+
 
     static GameManager instance = null;
 
@@ -12,11 +13,14 @@ public class GameManager : MonoBehaviour {
     public GameObject Dungeon;
     public GameObject Player;
     public GameObject AStarGrid;
+    public GameObject BulletManager;
     public List<GameObject> CurrentRoomEnemies;
     public List<GameObject> PathRequests;
 
     public Image Key;
     private Vector3 SpawnPosition;
+
+
     public bool HasBossKey;
 
 
@@ -58,7 +62,8 @@ public class GameManager : MonoBehaviour {
 	void Update () {
         if(Input.GetKeyDown(KeyCode.Backspace))
         {
-            RemoveEnemiesFromRoom(Player.GetComponent<PlayerControl>().CurrentRoom);
+            //RemoveEnemiesFromRoom(Player.GetComponent<PlayerControl>().CurrentRoom);
+            PlayerDeathRestart();
         }
     }
 
@@ -66,6 +71,18 @@ public class GameManager : MonoBehaviour {
     {
 
 
+    }
+    void PlayerDeathRestart()
+    {
+        //PlayerControl pm = Player.GetComponent<PlayerControl>();
+        //RemoveEnemiesFromRoom(pm.CurrentRoom);
+        //SpawnPlayer(new Vector2(Dungeon.transform.GetChild(0).gameObject.transform.GetChild(0).position.x,
+        //    Dungeon.transform.GetChild(0).gameObject.transform.GetChild(0).position.y));
+        //pm.CurrentRoom = Dungeon.transform.GetChild(0).gameObject;
+        //SpawnEnemies(Player.GetComponent<PlayerControl>().CurrentRoom);
+        //Camera.main.GetComponent<CameraMove>().SetCameraBoundary();
+        //AdjustAStarGridToRoom(Dungeon.transform.GetChild(0).gameObject);
+        GetComponent<FadeInOut>().EndScene(0);
     }
     void SpawnPlayer(Vector2 destination)
     {
@@ -89,8 +106,7 @@ public class GameManager : MonoBehaviour {
         m_RootRoom = Dungeon.transform.GetChild(0).gameObject;
         SpawnPlayer(new Vector2(m_RootRoom.transform.GetChild(0).position.x, m_RootRoom.transform.GetChild(0).position.y));
         SpawnEnemies(Player.GetComponent<PlayerControl>().CurrentRoom);
-        StartCoroutine(ProcessPathRequests());
-        Camera.main.GetComponent<CameraMove>().Focus = GameManager.singleton.Player;
+        Camera.main.GetComponent<CameraMove>().Focus = Player;
         Camera.main.GetComponent<CameraMove>().SetCameraBoundary();
         AdjustAStarGridToRoom(m_RootRoom);
     }
@@ -108,6 +124,8 @@ public class GameManager : MonoBehaviour {
         Camera.main.GetComponent<CameraMove>().SetCameraBoundary();
         AdjustAStarGridToRoom(Room);
         SpawnEnemies(Room);
+
+        //BulletManager.GetComponent<BulletManager>().ClearBullets();
     }
 
     /*
@@ -115,7 +133,9 @@ public class GameManager : MonoBehaviour {
      */
     public void AdjustAStarGridToRoom(GameObject Room)
     {
-        AStarGrid.GetComponent<AstarPath>().astarData.gridGraph.center = Room.transform.position;
+        if (AStarGrid.GetComponent<AstarPath>() == null)
+            return;
+        Debug.Log(AStarGrid.GetComponent<AstarPath>().astarData.gridGraph.center.x) ;//= Room.transform.position;
         AstarPath.active.Scan();
     }
 

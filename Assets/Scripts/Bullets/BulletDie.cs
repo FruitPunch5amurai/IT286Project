@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class BulletDie : MonoBehaviour {
@@ -30,12 +30,19 @@ public class BulletDie : MonoBehaviour {
         }
 
         yield return new WaitForSeconds(.25f);
+        try
+        {
+            GameManager.singleton.BulletManager.GetComponent<BulletManager>().Bullets.Remove(gameObject);
+        }
+        catch
+        {
+            Debug.Log("Bullet is Not in BulletList");
+        }
         Destroy(gameObject);
     }
-    void OnTriggerEnter2D(Collider2D col)
-    {
+    void HandleCollisions(Collider2D col) {
         //Don't die from deflections
-        if (col.tag == "Weapon")
+        if (col.tag == "Weapon" || col.tag == "Item")
         {
         }
         //Hit the player
@@ -51,7 +58,8 @@ public class BulletDie : MonoBehaviour {
             Destroy();
         }
         //Handle friendly fire
-        else if (col.tag == "Enemy") {
+        else if (col.tag == "Enemy")
+        {
             if (GetComponent<SpriteRenderer>())
             {
                 if (GetComponent<SpriteRenderer>().color == Color.yellow)
@@ -66,6 +74,15 @@ public class BulletDie : MonoBehaviour {
             Destroy();
         }
     }
+
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        HandleCollisions(col);
+    }
+    void OnTriggerStay2D(Collider2D col) {
+        HandleCollisions(col);
+    }
+
     void Destroy()
     {
         m_dead = true;
@@ -73,7 +90,8 @@ public class BulletDie : MonoBehaviour {
         {
             GetComponent<Animator>().SetBool("Dead", m_dead);
             GetComponent<BoxCollider2D>().enabled = false;
-            StartCoroutine(DestroyBullet());
+            
         }
+        StartCoroutine(DestroyBullet());
     }
 }

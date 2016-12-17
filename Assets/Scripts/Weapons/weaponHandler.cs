@@ -8,7 +8,7 @@ public class weaponHandler : MonoBehaviour {
     bool attacking;
     public string weaponState = "idle";
     List<Transform> weapons = new List<Transform>();
-    GameObject curWeapon;
+    public GameObject curWeapon;
 
     //Weapon Pathing
     List<Vector2> playerPath = new List<Vector2>();
@@ -37,6 +37,14 @@ public class weaponHandler : MonoBehaviour {
 
     //Local copies of weapon stats
     public float basicSwingSpeed;
+    public float basicDmg;
+    public float basicKnock;
+    public Color[] basicDeflections;
+    public float deflectionSpeed;
+
+    //Improved hitbox solution
+    List<GameObject> EnemyList = new List<GameObject>();
+    List<GameObject> ProjectileList = new List<GameObject>();
 
     // Use this for initialization
     void Start () {
@@ -47,14 +55,14 @@ public class weaponHandler : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (hasWeapon)
+        if (curWeapon != null)
         {
             //Handle input
             if (transform.parent.GetComponent<PlayerControl>().hasControl)
             {
                 if (Input.GetButtonDown("BasicAttack"))
                 {
-                    pickUpWeapon();
+                    findWeapon();
                     basicAttack();
                 }
                 if (Input.GetButtonDown("SpecialAttack")) specialAttack();
@@ -76,7 +84,7 @@ public class weaponHandler : MonoBehaviour {
         }
         //Try to pick up a weapon
         else if (Input.GetButtonDown("BasicAttack")) {
-            pickUpWeapon();
+            findWeapon();
             if (curWeapon != null)
             {
                 basicAttack();
@@ -100,6 +108,9 @@ public class weaponHandler : MonoBehaviour {
                     }
                 }
                 else {
+                    if (basicSwingSpeed > 15) {
+                        hitStuff(EnemyList, ProjectileList, basicDmg, basicKnock, basicDeflections, deflectionSpeed);
+                    }
                     curWeapon.transform.rotation = Quaternion.Slerp(curWeapon.transform.rotation, Quaternion.LookRotation(curWeapon.transform.forward, (curWeapon.transform.position + transform.right * basicEnd.x + transform.up * basicEnd.y) - curWeapon.transform.position), basicSwingSpeed * Time.deltaTime);
                     if (Quaternion.Angle(curWeapon.transform.rotation, Quaternion.LookRotation(curWeapon.transform.forward, (curWeapon.transform.position + transform.right * basicEnd.x + transform.up * basicEnd.y) - curWeapon.transform.position)) < 1) weaponState = "idle";
                 }
@@ -136,7 +147,7 @@ public class weaponHandler : MonoBehaviour {
 
     public void hitStuff(List<GameObject> enemies, List<GameObject> projectiles, float damage, float knockbackStrength, Color[] deflections, float deflectionSpeed)
     {
-        for (int i = 0; i < enemies.Count; i++)
+        while (enemies.Count > 0)
         {
             //Whack Enemy
             //Probably gonna outsource this code into the Enemy scripts, when they exist
@@ -219,6 +230,16 @@ public class weaponHandler : MonoBehaviour {
     void OnTriggerEnter2D(Collider2D coll)
     {
         if (coll.gameObject.tag == "Weapon") weapons.Add(coll.transform);
+        else if (coll.gameObject.tag == "Enemy")
+        {
+            EnemyList.Add(coll.gameObject);
+            Debug.Log("Enemy: " + coll.name);
+        }
+        else if (coll.gameObject.tag == "Projectile")
+        {
+            Debug.Log("Projectile: " + coll.name);
+            ProjectileList.Add(coll.gameObject);
+        }
 
     }
 
@@ -227,13 +248,24 @@ public class weaponHandler : MonoBehaviour {
         {
             if (!weapons.Contains(coll.transform)) weapons.Add(coll.transform);
         }
+        else if (coll.gameObject.tag == "Enemy")
+        {
+            if (!EnemyList.Contains(coll.gameObject)) EnemyList.Add(coll.gameObject);
+        }
+        else if (coll.gameObject.tag == "Projectile")
+        {
+            if (!ProjectileList.Contains(coll.gameObject)) ProjectileList.Add(coll.gameObject);
+        }
+                
     }
 
     void OnTriggerExit2D(Collider2D coll) {
         if (coll.gameObject.tag == "Weapon") weapons.Remove(coll.transform);
+        else if (coll.tag == "Enemy") EnemyList.Remove(coll.gameObject);
+        else if (coll.tag == "Projectile") ProjectileList.Remove(coll.gameObject);
     }
 
-    void pickUpWeapon()
+    void findWeapon()
     {
         if (weapons.Count == 0) return;
 
@@ -250,6 +282,11 @@ public class weaponHandler : MonoBehaviour {
                 closestI = i;
             }
         }
+        pickUpWeapon(weapons[closestI].gameObject);
+    }
+
+    public void pickUpWeapon(GameObject weapon) {
+
         if (hasWeapon)
         {
             Physics2D.IgnoreCollision(GetComponent<Collider2D>(), curWeapon.GetComponent<Collider2D>(), false);
@@ -258,12 +295,20 @@ public class weaponHandler : MonoBehaviour {
         else {
             hasWeapon = true;
         }
-        curWeapon = weapons[closestI].gameObject;
+        curWeapon = weapon;
         curWeapon.GetComponent<IWeapon>().pickUp(gameObject);
+
+        //Map local variables to weapon stats
         swingDelay = curWeapon.GetComponent<IWeapon>().swingDelay;
+        basicDmg = curWeapon.GetComponent<IWeapon>().BasicDamage;
+        basicKnock = curWeapon.GetComponent<IWeapon>().BasicKnock;
+        basicDeflections = curWeapon.GetComponent<IWeapon>().BasicDeflections;
+        deflectionSpeed = curWeapon.GetComponent<IWeapon>().DeflectionSpeed;
+
+
         //curWeapon.gameObject.layer = 8;
         Physics2D.IgnoreCollision(GetComponent<Collider2D>(), curWeapon.GetComponent<Collider2D>(), true);
-        weapons.RemoveAt(closestI);
+        weapons.Remove(weapon.transform);
         lastAttack = Time.time - swingDelay;
     }
 

@@ -31,6 +31,11 @@ public class Hammer : MonoBehaviour, IWeapon
     List<GameObject> enemies = new List<GameObject>();
     List<GameObject> projectiles = new List<GameObject>();
     float deflectionSpeed = 2.0f;
+    public float DeflectionSpeed {
+        get {
+            return deflectionSpeed;
+        }
+    }
 
 
     //Basic Attack
@@ -41,9 +46,24 @@ public class Hammer : MonoBehaviour, IWeapon
         }
     }
     public float basicDmg;
+    public float BasicDamage {
+        get {
+            return basicDmg;
+        }
+    }
     public float basicKnock;
+    public float BasicKnock {
+        get {
+            return basicKnock;
+        }
+    }
     public float basicSwingSpeed = 2.0f;
     Color[] basicDeflections = new Color[1] { Color.blue };
+    public Color[] BasicDeflections {
+        get {
+            return basicDeflections;
+        }
+    }
 
     //Special Attack
     public Vector2 specialOffset;
