@@ -6,7 +6,10 @@ public class weaponHandler : MonoBehaviour {
     //Store player transform. Making the basic attacks more independent of player position
     //The idea is to let the player walk out of the attack sooner, while the weapon finishes
     Transform player;
-    
+
+    //Resize hitbox on the fly
+    Vector2 startingSize;
+
     //State and inventory management
     bool hasWeapon;
     bool attacking;
@@ -58,6 +61,7 @@ public class weaponHandler : MonoBehaviour {
         lastStop = Time.time;
         lastAttack = Time.time - swingDelay;
         player = transform.parent;
+        startingSize = GetComponent<BoxCollider2D>().size;
 	}
 	
 	// Update is called once per frame
@@ -121,6 +125,8 @@ public class weaponHandler : MonoBehaviour {
                 }
                 else {
                     if (basicSwingSpeed > 15) {
+                        GetComponent<BoxCollider2D>().size = curWeapon.transform.localScale.y * startingSize / 2.5f;
+                        GetComponent<BoxCollider2D>().offset = new Vector2(0, GetComponent<BoxCollider2D>().size.y / 2);
                         hitStuff(EnemyList, ProjectileList, basicDmg, basicKnock, basicDeflections, deflectionSpeed);
                     }
                     curWeapon.transform.rotation = Quaternion.Slerp(curWeapon.transform.rotation, Quaternion.LookRotation(curWeapon.transform.forward, (curWeapon.transform.position + basicRight * basicEnd.x + basicUp * basicEnd.y) - curWeapon.transform.position), basicSwingSpeed * Time.deltaTime);
