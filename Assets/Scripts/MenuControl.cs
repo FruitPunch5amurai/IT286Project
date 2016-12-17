@@ -8,6 +8,8 @@ public class MenuControl : MonoBehaviour {
     public GameObject[] WeaponChoices = new GameObject[3];
     public static GameObject StarterWeapon;
 
+    public Object SceneToLoad;
+
     int CurrentOption = 0;
 
 	// Use this for initialization
@@ -38,7 +40,7 @@ public class MenuControl : MonoBehaviour {
             StarterWeapon = WeaponChoices[CurrentOption];
 
             //Replace this with the final "Level 1" or its equivalent
-            SceneManager.LoadScene("ExampleLevel");
+            SceneManager.LoadScene(SceneToLoad.name);
         }
 	}
 

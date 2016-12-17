@@ -34,12 +34,14 @@ public class PlayerControl : MonoBehaviour
         if (hasControl)
         {
             //Rotate Weapon Hitbox
-            if ((Input.GetAxisRaw("Horizontal") != 0) || (Input.GetAxisRaw("Vertical") != 0))
-                transform.GetChild(0).rotation = Quaternion.LookRotation(transform.forward, (Camera.main.transform.right * Input.GetAxisRaw("Horizontal") + Camera.main.transform.up * Input.GetAxisRaw("Vertical")));
-
+            if (WeaponController.GetComponent<weaponHandler>().weaponState == "idle")
+            {
+                if ((Input.GetAxisRaw("Horizontal") != 0) || (Input.GetAxisRaw("Vertical") != 0))
+                    WeaponController.transform.rotation = Quaternion.LookRotation(transform.forward, (Camera.main.transform.right * Input.GetAxisRaw("Horizontal") + Camera.main.transform.up * Input.GetAxisRaw("Vertical")));
+            }
             if ((Input.GetAxisRaw("Horizontal") != 0) || (Input.GetAxisRaw("Vertical") != 0))
             {
-                move(moveSpeed);
+                move(moveSpeed, Camera.main.transform.right * Input.GetAxisRaw("Horizontal") + Camera.main.transform.up * Input.GetAxisRaw("Vertical"));
             }
 
 
@@ -109,9 +111,9 @@ public class PlayerControl : MonoBehaviour
         //Else.... recovery behaviour?
     }
 
-    public void move(float speed)
+    public void move(float speed, Vector3 direction)
     {
-        Vector3 input = WeaponController.transform.up * Time.deltaTime * speed;
+        Vector3 input = direction * Time.deltaTime * speed;
 
         RaycastHit2D move;
         RaycastHit2D move2;

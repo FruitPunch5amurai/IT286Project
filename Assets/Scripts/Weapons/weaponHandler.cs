@@ -3,6 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class weaponHandler : MonoBehaviour {
+    //Store player transform. Making the basic attacks more independent of player position
+    //The idea is to let the player walk out of the attack sooner, while the weapon finishes
+    Transform player;
+    
     //State and inventory management
     bool hasWeapon;
     bool attacking;
@@ -19,6 +23,8 @@ public class weaponHandler : MonoBehaviour {
 
     //Basic Attack implementation
     public Vector2 basicOffset;
+    Vector3 basicRight;
+    Vector3 basicUp;
     Vector3 basicStart = new Vector3(1, 1, 0);
     Vector3 startPos;
     Quaternion startRot;
@@ -47,10 +53,11 @@ public class weaponHandler : MonoBehaviour {
     List<GameObject> ProjectileList = new List<GameObject>();
 
     // Use this for initialization
-    void Start () {
+    void Awake () {
         if (curWeapon == null) hasWeapon = false;
         lastStop = Time.time;
         lastAttack = Time.time - swingDelay;
+        player = transform.parent;
 	}
 	
 	// Update is called once per frame
@@ -58,7 +65,7 @@ public class weaponHandler : MonoBehaviour {
         if (curWeapon != null)
         {
             //Handle input
-            if (transform.parent.GetComponent<PlayerControl>().hasControl)
+            if (player.GetComponent<PlayerControl>().hasControl)
             {
                 if (Input.GetButtonDown("BasicAttack"))
                 {
@@ -105,14 +112,19 @@ public class weaponHandler : MonoBehaviour {
                         curWeapon.transform.rotation = startRot;
                         transitioning = false;
                         curWeapon.GetComponent<IWeapon>().state = "basic";
+
+                        //Leftover from testing with player moving during basic attacks
+                        //Felt more fluid, but not sure about finalizing it
+                        //transform.parent.GetComponent<PlayerControl>().hasControl = true;
+                        transform.parent = null;
                     }
                 }
                 else {
                     if (basicSwingSpeed > 15) {
                         hitStuff(EnemyList, ProjectileList, basicDmg, basicKnock, basicDeflections, deflectionSpeed);
                     }
-                    curWeapon.transform.rotation = Quaternion.Slerp(curWeapon.transform.rotation, Quaternion.LookRotation(curWeapon.transform.forward, (curWeapon.transform.position + transform.right * basicEnd.x + transform.up * basicEnd.y) - curWeapon.transform.position), basicSwingSpeed * Time.deltaTime);
-                    if (Quaternion.Angle(curWeapon.transform.rotation, Quaternion.LookRotation(curWeapon.transform.forward, (curWeapon.transform.position + transform.right * basicEnd.x + transform.up * basicEnd.y) - curWeapon.transform.position)) < 1) weaponState = "idle";
+                    curWeapon.transform.rotation = Quaternion.Slerp(curWeapon.transform.rotation, Quaternion.LookRotation(curWeapon.transform.forward, (curWeapon.transform.position + basicRight * basicEnd.x + basicUp * basicEnd.y) - curWeapon.transform.position), basicSwingSpeed * Time.deltaTime);
+                    if (Quaternion.Angle(curWeapon.transform.rotation, Quaternion.LookRotation(curWeapon.transform.forward, (curWeapon.transform.position + basicRight * basicEnd.x + basicUp * basicEnd.y) - curWeapon.transform.position)) < 1) weaponState = "idle";
                 }
 
             }
@@ -139,7 +151,9 @@ public class weaponHandler : MonoBehaviour {
                 playerPath.Clear();
                 weaponState = "idle";
                 lastStop = Time.time;
-                transform.parent.GetComponent<PlayerControl>().hasControl = true;
+                transform.parent = player;
+                transform.localPosition = Vector3.zero;
+                player.GetComponent<PlayerControl>().hasControl = true;
                 curWeapon.GetComponent<IWeapon>().state = "idle";
             }
         }
@@ -173,14 +187,14 @@ public class weaponHandler : MonoBehaviour {
                         if (projectiles[0].transform.parent != null)
                         {
                             //Deal with parent-child relationships
-                            projectiles[0].AddComponent<Rigidbody2D>().velocity = (projectiles[0].transform.position - transform.parent.position).normalized * deflectionSpeed;
+                            projectiles[0].AddComponent<Rigidbody2D>().velocity = (projectiles[0].transform.position - transform.position).normalized * deflectionSpeed;
                             projectiles[0].GetComponent<Rigidbody2D>().gravityScale = 0;
                             Transform rotator = projectiles[0].transform.parent;
                             projectiles[0].transform.parent = null;
                             rotator.GetComponent<BulletRotateAndDisperse>().children = rotator.GetComponentsInChildren<Transform>();
                         }
                         else {
-                            projectiles[0].GetComponent<Rigidbody2D>().velocity = (projectiles[0].transform.position - transform.parent.position).normalized * deflectionSpeed;
+                            projectiles[0].GetComponent<Rigidbody2D>().velocity = (projectiles[0].transform.position - transform.position).normalized * deflectionSpeed;
                         }
                     }
                     projectiles.RemoveAt(0);
@@ -215,14 +229,14 @@ public class weaponHandler : MonoBehaviour {
         }
         //If the path is empty, we've caught up to the player
         else {
-            curWeapon.transform.position = transform.parent.position;
+            curWeapon.transform.position = player.position;
             lastStop = Time.time;
         }
     }
 
     void trackPlayer() {
         //Keep track of player's path
-        playerPath.Add(transform.parent.position);
+        playerPath.Add(player.position);
         
     }
 
@@ -328,7 +342,9 @@ public class weaponHandler : MonoBehaviour {
 
             weaponState = "basic";
             startRot = Quaternion.LookRotation(transform.forward, (transform.position + transform.right * basicStart.x + transform.up * basicStart.y) - transform.position);
-            transform.parent.GetComponent<PlayerControl>().hasControl = false;
+            player.GetComponent<PlayerControl>().hasControl = false;
+            basicRight = transform.right;
+            basicUp = transform.up;
         }
     }
 
@@ -343,7 +359,7 @@ public class weaponHandler : MonoBehaviour {
 
             weaponState = "special";
             startRot = Quaternion.LookRotation(transform.forward, (transform.position + transform.right * specialStart.x + transform.up * specialStart.y) - transform.position);
-            transform.parent.GetComponent<PlayerControl>().hasControl = false;
+            player.GetComponent<PlayerControl>().hasControl = false;
         }
     }
 

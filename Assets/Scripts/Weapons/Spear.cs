@@ -132,7 +132,7 @@ public class Spear : MonoBehaviour, IWeapon
                 //do this
                 if (GetComponent<Animation>().isPlaying)
                 {
-                    player.GetComponent<PlayerControl>().move(specialSpeed * player.GetComponent<PlayerControl>().moveSpeed);
+                    player.GetComponent<PlayerControl>().move(specialSpeed * player.GetComponent<PlayerControl>().moveSpeed, weaponCont.transform.forward);
 
                     if (Time.time - lastSpecial > 0.45)
                     {

@@ -113,7 +113,7 @@ public class broadsword : MonoBehaviour, IWeapon {
                 weaponCont.GetComponent<weaponHandler>().hitStuff(enemies, projectiles, specialDmg, specialKnock, specialDeflections, deflectionSpeed);
                 if (Time.time - lastDash < dashTime)
                 {
-                    player.GetComponent<PlayerControl>().move(dashSpeed);
+                    player.GetComponent<PlayerControl>().move(dashSpeed, weaponCont.transform.forward);
                 }
                 else {
                     localState = "idle";
