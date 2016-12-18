@@ -120,7 +120,7 @@ public class PlayerControl : MonoBehaviour
     {
         Vector3 input = direction * Time.deltaTime * speed;
         //The "easy" way
-        //transform.Translate(input);
+        transform.Translate(input);
 
         //Generally handles collisions better
         //Couldn't figure out a few edge cases, so won't be used in the final build
