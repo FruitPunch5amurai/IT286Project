@@ -130,7 +130,7 @@ public class weaponHandler : MonoBehaviour {
                         hitStuff(EnemyList, ProjectileList, basicDmg, basicKnock, basicDeflections, deflectionSpeed);
                     }
                     curWeapon.transform.rotation = Quaternion.Slerp(curWeapon.transform.rotation, Quaternion.LookRotation(curWeapon.transform.forward, (curWeapon.transform.position + basicRight * basicEnd.x + basicUp * basicEnd.y) - curWeapon.transform.position), basicSwingSpeed * Time.deltaTime);
-                    if (Quaternion.Angle(curWeapon.transform.rotation, Quaternion.LookRotation(curWeapon.transform.forward, (curWeapon.transform.position + basicRight * basicEnd.x + basicUp * basicEnd.y) - curWeapon.transform.position)) < 1) weaponState = "idle";
+                    if (Quaternion.Angle(curWeapon.transform.rotation, Quaternion.LookRotation(curWeapon.transform.forward, (curWeapon.transform.position + basicRight * basicEnd.x + basicUp * basicEnd.y) - curWeapon.transform.position)) < 3) weaponState = "idle";
                 }
 
             }
@@ -171,10 +171,15 @@ public class weaponHandler : MonoBehaviour {
         {
             //Whack Enemy
             //Probably gonna outsource this code into the Enemy scripts, when they exist
-
-            enemies[0].GetComponent<EnemyHealth>().getHit(damage, (enemies[0].transform.position - transform.position).normalized * knockbackStrength);
-            enemies.RemoveAt(0);
-            
+            try
+            {
+                enemies[0].GetComponent<EnemyHealth>().getHit(damage, (enemies[0].transform.position - transform.position).normalized * knockbackStrength);
+                enemies.RemoveAt(0);
+            }
+            catch
+            {
+                enemies.RemoveAt(0);
+            }
         }
         while (projectiles.Count > 0)
         {
@@ -253,11 +258,9 @@ public class weaponHandler : MonoBehaviour {
         else if (coll.gameObject.tag == "Enemy")
         {
             EnemyList.Add(coll.gameObject);
-            Debug.Log("Enemy: " + coll.name);
         }
         else if (coll.gameObject.tag == "Projectile")
         {
-            Debug.Log("Projectile: " + coll.name);
             ProjectileList.Add(coll.gameObject);
         }
 
@@ -310,6 +313,7 @@ public class weaponHandler : MonoBehaviour {
         if (hasWeapon)
         {
             Physics2D.IgnoreCollision(GetComponent<Collider2D>(), curWeapon.GetComponent<Collider2D>(), false);
+            curWeapon.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
             curWeapon.GetComponent<IWeapon>().dropWeapon();
         }
         else {
@@ -327,6 +331,12 @@ public class weaponHandler : MonoBehaviour {
 
 
         //curWeapon.gameObject.layer = 8;
+
+
+        //Weird bugs involving insta-switching weapons
+        //picking up a moving weapon is apparently dangerous
+        curWeapon.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+        curWeapon.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
         Physics2D.IgnoreCollision(GetComponent<Collider2D>(), curWeapon.GetComponent<Collider2D>(), true);
         weapons.Remove(weapon.transform);
         lastAttack = Time.time - swingDelay;
@@ -365,7 +375,7 @@ public class weaponHandler : MonoBehaviour {
 
             weaponState = "special";
             startRot = Quaternion.LookRotation(transform.forward, (transform.position + transform.right * specialStart.x + transform.up * specialStart.y) - transform.position);
-            player.GetComponent<PlayerControl>().hasControl = false;
+            //player.GetComponent<PlayerControl>().hasControl = false;
         }
     }
 

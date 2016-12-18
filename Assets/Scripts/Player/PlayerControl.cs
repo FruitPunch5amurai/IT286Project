@@ -12,6 +12,7 @@ public class PlayerControl : MonoBehaviour
     public float moveSpeed = 2.0f;
     public bool hasControl = true;
     public bool invincible = false;
+    public bool spinning = false;
     public LayerMask RayCastIgnore;
     public GameObject WeaponController;
 
@@ -30,7 +31,7 @@ public class PlayerControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //if (GameManager.singleton.CurrentGameState != GameManager.GameState.Play) return;
+        if (GameManager.singleton.CurrentGameState != GameManager.GameState.Play) return;
         if (hasControl)
         {
             //Rotate Weapon Hitbox
@@ -45,8 +46,7 @@ public class PlayerControl : MonoBehaviour
             }
 
 
-            //Change Sprites, waiting for Input
-
+            //Change Sprites
             if (Input.GetKey(KeyCode.UpArrow))
             {
                 GetComponent<SpriteRenderer>().sprite = n;
@@ -73,7 +73,8 @@ public class PlayerControl : MonoBehaviour
             }
 
         }
-        else {
+        if ((spinning) || (!hasControl)) {
+            //If we can't go off of player input, make some assumptions
             if (Mathf.Abs(WeaponController.transform.up.y) <= Mathf.Abs(WeaponController.transform.up.x))
             {
                 if (WeaponController.transform.up.x > 0)
@@ -81,11 +82,13 @@ public class PlayerControl : MonoBehaviour
                     //right 
                     GetComponent<SpriteRenderer>().sprite = e;
                     GetComponent<SpriteRenderer>().flipX = true;
+                    orientation = "e";
                 }
                 else {
                     //left
                     GetComponent<SpriteRenderer>().sprite = e;
                     GetComponent<SpriteRenderer>().flipX = false;
+                    orientation = "w";
                 }
             }
             else {
@@ -94,11 +97,13 @@ public class PlayerControl : MonoBehaviour
                     //up
                     GetComponent<SpriteRenderer>().sprite = n;
                     GetComponent<SpriteRenderer>().flipX = false;
+                    orientation = "n";
                 }
                 else {
                     //down
                     GetComponent<SpriteRenderer>().sprite = s;
                     GetComponent<SpriteRenderer>().flipX = false;
+                    orientation = "s";
                 }
             }
         }
@@ -114,7 +119,11 @@ public class PlayerControl : MonoBehaviour
     public void move(float speed, Vector3 direction)
     {
         Vector3 input = direction * Time.deltaTime * speed;
+        //The "easy" way
+        transform.Translate(input);
 
+        //The "I forgot that function's a thing" way
+        /*
         RaycastHit2D move;
         RaycastHit2D move2;
         move2 = Physics2D.Raycast(transform.position, new Vector2(input.x, 0), GetComponent<BoxCollider2D>().size.x * transform.lossyScale.x / 2, ~RayCastIgnore);
@@ -152,6 +161,7 @@ public class PlayerControl : MonoBehaviour
         else {
             transform.position = transform.position + new Vector3(move.centroid.x, move.centroid.y, 0);
         }
+        */
     }
 
     public void DamagePlayer() {
