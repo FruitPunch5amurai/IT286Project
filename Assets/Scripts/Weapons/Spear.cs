@@ -142,6 +142,7 @@ public class Spear : MonoBehaviour, IWeapon
                 else {
                     localState = "idle";
                     transform.parent = null;
+                    lastSpecial = Time.time;
                     GetComponent<BoxCollider2D>().offset = boxOffset;
                     GetComponent<BoxCollider2D>().size = boxSize;
                     weaponCont.GetComponent<weaponHandler>().weaponState = "idle";
@@ -202,7 +203,6 @@ public class Spear : MonoBehaviour, IWeapon
     }
     void IWeapon.specialAttack()
     {
-        lastSpecial = Time.time;
         player.GetComponent<SpriteRenderer>().color = Color.white;
         occupied = true;
         localState = "special";

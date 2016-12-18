@@ -138,6 +138,7 @@ public class Hammer : MonoBehaviour, IWeapon
                     if (spinCounter > 360 * numSpins - 1)
                     {
                         localState = "idle";
+                        lastSpin = Time.time;
                         weaponCont.transform.rotation = specialStart;
                         transform.parent = null;
                         weaponCont.GetComponent<weaponHandler>().weaponState = "idle";
@@ -204,7 +205,6 @@ public class Hammer : MonoBehaviour, IWeapon
         if ((!occupied) && (Time.time - lastSpin > spinCD))
         {
             transform.parent = weaponCont.transform;
-            lastSpin = Time.time;
             spinCounter = 0.0f;
             player.GetComponent<SpriteRenderer>().color = Color.white;
             occupied = true;
