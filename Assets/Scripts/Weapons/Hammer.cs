@@ -73,6 +73,7 @@ public class Hammer : MonoBehaviour, IWeapon
     public float numSpins = 2;
     float spinCounter = 0.0f;
     bool startedSpin;
+    float spinStartTime;
     Quaternion prevRot;
     private float lastSpin;
     public float spinCD = 4.0f;
@@ -113,16 +114,17 @@ public class Hammer : MonoBehaviour, IWeapon
             else if (localState == "special")
             {
                 //do this
+                //Slow the enemies down
+                for (int i = 0; i < enemies.Count; i++)
+                {
+                    enemies[i].AddComponent<SlowStatusEffect>();
+                }
+
                 weaponCont.GetComponent<weaponHandler>().hitStuff(enemies, projectiles, specialDmg, specialKnock, specialDeflections, deflectionSpeed);
 
                 //Stay on the player
                 transform.position = player.transform.position;
 
-                //Slow the enemies down
-                while (enemies.Count > 0) {
-                    enemies[0].AddComponent<SlowStatusEffect>();
-                    enemies.RemoveAt(0);
-                }
 
 
                 if ((Mathf.Abs(Quaternion.Angle(weaponCont.transform.rotation, specialStart)) > 45) || (startedSpin))
@@ -138,8 +140,8 @@ public class Hammer : MonoBehaviour, IWeapon
                     if (spinCounter > 360 * numSpins - 1)
                     {
                         localState = "idle";
-                        lastSpin = Time.time;
                         weaponCont.transform.rotation = specialStart;
+                        lastSpin = Time.time;
                         transform.parent = null;
                         weaponCont.GetComponent<weaponHandler>().weaponState = "idle";
                         player.GetComponent<PlayerControl>().spinning = false;
@@ -158,7 +160,7 @@ public class Hammer : MonoBehaviour, IWeapon
                 }
                 else
                 {
-                    newSpinSpeed = spinSpeed + 0.1f * (Time.time - lastSpin);
+                    newSpinSpeed = spinSpeed + 0.1f * (Time.time - spinStartTime);
                     prevRot = weaponCont.transform.rotation;
                     weaponCont.transform.rotation = Quaternion.Lerp(weaponCont.transform.rotation, spinTarget, newSpinSpeed);
                 }
@@ -205,6 +207,7 @@ public class Hammer : MonoBehaviour, IWeapon
         if ((!occupied) && (Time.time - lastSpin > spinCD))
         {
             transform.parent = weaponCont.transform;
+            spinStartTime = Time.time;
             spinCounter = 0.0f;
             player.GetComponent<SpriteRenderer>().color = Color.white;
             occupied = true;

@@ -194,7 +194,7 @@ public class weaponHandler : MonoBehaviour {
 
                         //Looking into a more nuanced deflection system
                         //Using a simple turn-around for testing
-                        
+
                         if (projectiles[0].transform.parent != null)
                         {
                             //Deal with parent-child relationships
@@ -208,14 +208,14 @@ public class weaponHandler : MonoBehaviour {
                             projectiles[0].GetComponent<Rigidbody2D>().velocity = (projectiles[0].transform.position - transform.position).normalized * deflectionSpeed;
                         }
                     }
-                    projectiles.RemoveAt(0);
                 }
                 catch (MissingReferenceException e)
                 {
-                    projectiles.RemoveAt(0);
+
                 }
 
             }
+            projectiles.RemoveAt(0);
         }
     }
 
