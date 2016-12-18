@@ -59,7 +59,7 @@ GameObject:
   - component: {fileID: 4253704244486730}
   - component: {fileID: 61685524978879982}
   - component: {fileID: 114367074885960412}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: weaponCont
   m_TagString: Weapon
   m_Icon: {fileID: 0}
@@ -77,7 +77,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4679005298446950}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4679005298446950
 Transform:
@@ -89,8 +89,8 @@ Transform:
   m_LocalPosition: {x: 0.498447, y: 0.0017771721, z: 0.26}
   m_LocalScale: {x: 1.0089582, y: 1.0089574, z: 1.0089574}
   m_Children:
-  - {fileID: 4253704244486730}
   - {fileID: 4727931899559888}
+  - {fileID: 4253704244486730}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -105,7 +105,7 @@ Transform:
   m_LocalScale: {x: 0.095763154, y: 0.09576324, z: 0.09576324}
   m_Children: []
   m_Father: {fileID: 4679005298446950}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &50516040068137558
 Rigidbody2D:
@@ -114,7 +114,7 @@ Rigidbody2D:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1099645228561196}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -211,8 +211,12 @@ MonoBehaviour:
   basicOffset: {x: 0, y: 0}
   specialOffset: {x: 0, y: 0}
   specialStart: {x: 1, y: 1, z: 0}
-  transitionSpeed: 1
+  transitionSpeed: 0.4
   basicSwingSpeed: 0
+  basicDmg: 0
+  basicKnock: 0
+  basicDeflections: []
+  deflectionSpeed: 0
 --- !u!114 &114826933591360580
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -238,12 +242,13 @@ MonoBehaviour:
   health: 6
   recoveryTime: 0.8
   lastDmg: 0
-  moveSpeed: 3
+  moveSpeed: 1.17
   hasControl: 1
   invincible: 0
+  spinning: 0
   RayCastIgnore:
     serializedVersion: 2
-    m_Bits: 28416
+    m_Bits: 28420
   WeaponController: {fileID: 1356193163971162}
   CurrentRoom: {fileID: 0}
   n: {fileID: 21300004, guid: f66206d724984d84dadce8e5004a6af0, type: 3}
