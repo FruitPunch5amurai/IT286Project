@@ -346,7 +346,7 @@ public class weaponHandler : MonoBehaviour {
         //curWeapon.GetComponent<IWeapon>().basicAttack();
 
         //New code, testing
-        if ((!attacking) && (Time.time - lastAttack > swingDelay)) {
+        if ((!attacking) && (Time.time - lastAttack >= swingDelay - 0.001f)) {
             attacking = true;
             //New transition setup
             transitioning = true;
