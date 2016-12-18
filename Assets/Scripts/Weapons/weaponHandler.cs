@@ -69,7 +69,7 @@ public class weaponHandler : MonoBehaviour {
         if (curWeapon != null)
         {
             //Handle input
-            if (player.GetComponent<PlayerControl>().hasControl)
+            if ((player.GetComponent<PlayerControl>().hasControl) && (!player.GetComponent<PlayerControl>().spinning))
             {
                 if (Input.GetButtonDown("BasicAttack"))
                 {
