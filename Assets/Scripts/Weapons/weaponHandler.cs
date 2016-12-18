@@ -111,7 +111,8 @@ public class weaponHandler : MonoBehaviour {
                 {
                     curWeapon.transform.position = Vector2.Lerp(curWeapon.transform.position, startPos, transitionSpeed);
                     curWeapon.transform.rotation = Quaternion.Lerp(curWeapon.transform.rotation, startRot, transitionSpeed);
-                    if (((curWeapon.transform.position - startPos).sqrMagnitude < 0.1) && (Quaternion.Angle(curWeapon.transform.rotation, startRot) < 5)) {
+                    if (((curWeapon.transform.position - startPos).sqrMagnitude < 0.1) && (Quaternion.Angle(curWeapon.transform.rotation, startRot) < 5))
+                    {
                         curWeapon.transform.position = startPos;
                         curWeapon.transform.rotation = startRot;
                         transitioning = false;
@@ -119,20 +120,31 @@ public class weaponHandler : MonoBehaviour {
 
                         //Leftover from testing with player moving during basic attacks
                         //Felt more fluid, but not sure about finalizing it
-                        //transform.parent.GetComponent<PlayerControl>().hasControl = true;
-                        transform.parent = null;
+
+                        //Let the player walk during the attack
+                        player.GetComponent<PlayerControl>().hasControl = true;
+
+                        //Debuff the player speed while attacking
+
+                        //transform.parent = null;
                     }
                 }
                 else {
-                    if (basicSwingSpeed > 15) {
+                    if (basicSwingSpeed > 15)
+                    {
                         GetComponent<BoxCollider2D>().size = curWeapon.transform.localScale.y * startingSize / 2.5f;
                         GetComponent<BoxCollider2D>().offset = new Vector2(0, GetComponent<BoxCollider2D>().size.y / 2);
                         hitStuff(EnemyList, ProjectileList, basicDmg, basicKnock, basicDeflections, deflectionSpeed);
                     }
                     curWeapon.transform.rotation = Quaternion.Slerp(curWeapon.transform.rotation, Quaternion.LookRotation(curWeapon.transform.forward, (curWeapon.transform.position + basicRight * basicEnd.x + basicUp * basicEnd.y) - curWeapon.transform.position), basicSwingSpeed * Time.deltaTime);
-                    if (Quaternion.Angle(curWeapon.transform.rotation, Quaternion.LookRotation(curWeapon.transform.forward, (curWeapon.transform.position + basicRight * basicEnd.x + basicUp * basicEnd.y) - curWeapon.transform.position)) < 3) weaponState = "idle";
+                    if (Quaternion.Angle(curWeapon.transform.rotation, Quaternion.LookRotation(curWeapon.transform.forward, (curWeapon.transform.position + basicRight * basicEnd.x + basicUp * basicEnd.y) - curWeapon.transform.position)) < 3)
+                    {
+                        weaponState = "idle";
+                        curWeapon.transform.parent = null;
+                        transform.parent = player;
+                        transform.localPosition = Vector3.zero;
+                    }
                 }
-
             }
             else if (weaponState == "special")
             {
@@ -358,9 +370,10 @@ public class weaponHandler : MonoBehaviour {
 
             weaponState = "basic";
             startRot = Quaternion.LookRotation(transform.forward, (transform.position + transform.right * basicStart.x + transform.up * basicStart.y) - transform.position);
-            player.GetComponent<PlayerControl>().hasControl = false;
+            //player.GetComponent<PlayerControl>().hasControl = false;
             basicRight = transform.right;
             basicUp = transform.up;
+            transform.parent = null;
         }
     }
 
