@@ -123,7 +123,7 @@ MonoBehaviour:
   _SwingDelay: 2
   basicDmg: 8
   basicKnock: 3
-  basicSwingSpeed: 5
+  basicSwingSpeed: 4.5
   specialOffset: {x: 0, y: 0}
   specialStart: {x: 0, y: 0, z: 0, w: 0}
   spinSpeed: 0.2
