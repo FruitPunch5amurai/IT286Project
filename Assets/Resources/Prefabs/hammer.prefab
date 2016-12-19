@@ -65,8 +65,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1060452384950790}
   m_LocalRotation: {x: -0, y: -0, z: 0.49536595, w: 0.8686845}
-  m_LocalPosition: {x: -4.4, y: 2.02, z: -0.07}
-  m_LocalScale: {x: 1.380273, y: 9.127708, z: 5.9268827}
+  m_LocalPosition: {x: 2.0704935, y: -0.7404281, z: -0.07}
+  m_LocalScale: {x: 0.4861608, y: 3.214971, z: 2.0875728}
   m_Children:
   - {fileID: 4766450236669284}
   m_Father: {fileID: 0}
@@ -117,21 +117,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60a2c19bb5a442747a1ee8b76bfb76bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  throwSpeed: 25
+  throwSpeed: 3
   idleOffset: {x: 0, y: 0}
   occupied: 0
   _SwingDelay: 2
-  basicDmg: 0
-  basicKnock: 0
-  basicSwingSpeed: 2
+  basicDmg: 8
+  basicKnock: 3
+  basicSwingSpeed: 4.5
   specialOffset: {x: 0, y: 0}
   specialStart: {x: 0, y: 0, z: 0, w: 0}
   spinSpeed: 0.2
   numSpins: 2
-  spinTime: 1
-  spinCD: 3
-  specialDmg: 0
-  specialKnock: 0
+  spinCD: 4
+  specialDmg: 8
+  specialKnock: 4
+  MovementSpeedMultipler: 0.3
   targetColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   glowSpeed: 0.005
   colorThreshold: 0.1

@@ -23,9 +23,10 @@ GameObject:
   - component: {fileID: 114000010485450658}
   - component: {fileID: 50000012539466062}
   - component: {fileID: 61000011298848316}
-  - component: {fileID: 114000010721825680}
   - component: {fileID: 114000012353033150}
   - component: {fileID: 114000010775719088}
+  - component: {fileID: 114748484004149480}
+  - component: {fileID: 114116585494855704}
   m_Layer: 8
   m_Name: EnemySingleShooter
   m_TagString: Enemy
@@ -166,7 +167,7 @@ MonoBehaviour:
     tagsChange: -1
     tagsSet: -1
   tagPenalties: 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
---- !u!114 &114000010721825680
+--- !u!114 &114000010775719088
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -174,7 +175,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1000010076840742}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: efb7432aac539b6449051d527e8327d2, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b56ae2f00c08fb4280cfbb8aaf467c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Speed: 0.4
@@ -227,6 +228,37 @@ MonoBehaviour:
   RaycastIgnore:
     serializedVersion: 2
     m_Bits: 32004
+--- !u!114 &114116585494855704
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000010076840742}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6782808383518649b06ba73684aea53, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Speed: 0.4
+  CurrentRoom: {fileID: 0}
+  NextWayPointDistance: 0.1
+  PathHasEnded: 0
+  Target: {x: 0, y: 0, z: 0}
+  FMode: 0
+  CurrentState: 0
+  PreviousState: 0
+--- !u!114 &114748484004149480
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000010076840742}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a3e2a6dc49d5424b937d3b890a8f6fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 10
 --- !u!212 &212000013669175108
 SpriteRenderer:
   m_ObjectHideFlags: 1

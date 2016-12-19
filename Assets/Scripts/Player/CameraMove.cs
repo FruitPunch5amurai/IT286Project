@@ -51,7 +51,9 @@ public class CameraMove : MonoBehaviour {
         {
             GameObject Room = Focus.GetComponent<PlayerControl>().CurrentRoom;
             Vector3 Size = Room.GetComponent<BoxCollider>().size;
+            Vector3 Rotation = Room.transform.localRotation.eulerAngles;
 
+            Debug.Log("x: " + Rotation.x + "y: " + Rotation.y + "z: " + Rotation.z);
             float vertExtent = GetComponent<Camera>().orthographicSize;
             float horzExtent = vertExtent * Screen.width / Screen.height;
             CameraBoundary.xMin = Room.transform.position.x + (float)(horzExtent - Size.x / 2.0f);

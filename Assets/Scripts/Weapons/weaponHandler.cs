@@ -3,12 +3,19 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class weaponHandler : MonoBehaviour {
+    //Store player transform. Making the basic attacks more independent of player position
+    //The idea is to let the player walk out of the attack sooner, while the weapon finishes
+    Transform player;
+
+    //Resize hitbox on the fly
+    Vector2 startingSize;
+
     //State and inventory management
     bool hasWeapon;
     bool attacking;
     public string weaponState = "idle";
     List<Transform> weapons = new List<Transform>();
-    GameObject curWeapon;
+    public GameObject curWeapon;
 
     //Weapon Pathing
     List<Vector2> playerPath = new List<Vector2>();
@@ -19,6 +26,8 @@ public class weaponHandler : MonoBehaviour {
 
     //Basic Attack implementation
     public Vector2 basicOffset;
+    Vector3 basicRight;
+    Vector3 basicUp;
     Vector3 basicStart = new Vector3(1, 1, 0);
     Vector3 startPos;
     Quaternion startRot;
@@ -37,24 +46,34 @@ public class weaponHandler : MonoBehaviour {
 
     //Local copies of weapon stats
     public float basicSwingSpeed;
+    public float basicDmg;
+    public float basicKnock;
+    public Color[] basicDeflections;
+    public float deflectionSpeed;
+
+    //Improved hitbox solution
+    List<GameObject> EnemyList = new List<GameObject>();
+    List<GameObject> ProjectileList = new List<GameObject>();
 
     // Use this for initialization
-    void Start () {
+    void Awake () {
         if (curWeapon == null) hasWeapon = false;
         lastStop = Time.time;
         lastAttack = Time.time - swingDelay;
+        player = transform.parent;
+        startingSize = GetComponent<BoxCollider2D>().size;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        if (hasWeapon)
+        if (curWeapon != null)
         {
             //Handle input
-            if (transform.parent.GetComponent<PlayerControl>().hasControl)
+            if ((player.GetComponent<PlayerControl>().hasControl) && (!player.GetComponent<PlayerControl>().spinning))
             {
                 if (Input.GetButtonDown("BasicAttack"))
                 {
-                    pickUpWeapon();
+                    findWeapon();
                     basicAttack();
                 }
                 if (Input.GetButtonDown("SpecialAttack")) specialAttack();
@@ -76,7 +95,7 @@ public class weaponHandler : MonoBehaviour {
         }
         //Try to pick up a weapon
         else if (Input.GetButtonDown("BasicAttack")) {
-            pickUpWeapon();
+            findWeapon();
             if (curWeapon != null)
             {
                 basicAttack();
@@ -92,18 +111,40 @@ public class weaponHandler : MonoBehaviour {
                 {
                     curWeapon.transform.position = Vector2.Lerp(curWeapon.transform.position, startPos, transitionSpeed);
                     curWeapon.transform.rotation = Quaternion.Lerp(curWeapon.transform.rotation, startRot, transitionSpeed);
-                    if (((curWeapon.transform.position - startPos).sqrMagnitude < 0.1) && (Quaternion.Angle(curWeapon.transform.rotation, startRot) < 5)) {
+                    if (((curWeapon.transform.position - startPos).sqrMagnitude < 0.1) && (Quaternion.Angle(curWeapon.transform.rotation, startRot) < 5))
+                    {
                         curWeapon.transform.position = startPos;
                         curWeapon.transform.rotation = startRot;
                         transitioning = false;
                         curWeapon.GetComponent<IWeapon>().state = "basic";
+
+                        //Leftover from testing with player moving during basic attacks
+                        //Felt more fluid, but not sure about finalizing it
+
+                        //Let the player walk during the attack
+                        player.GetComponent<PlayerControl>().hasControl = true;
+
+                        //Debuff the player speed while attacking
+
+                        //transform.parent = null;
                     }
                 }
                 else {
-                    curWeapon.transform.rotation = Quaternion.Slerp(curWeapon.transform.rotation, Quaternion.LookRotation(curWeapon.transform.forward, (curWeapon.transform.position + transform.right * basicEnd.x + transform.up * basicEnd.y) - curWeapon.transform.position), basicSwingSpeed * Time.deltaTime);
-                    if (Quaternion.Angle(curWeapon.transform.rotation, Quaternion.LookRotation(curWeapon.transform.forward, (curWeapon.transform.position + transform.right * basicEnd.x + transform.up * basicEnd.y) - curWeapon.transform.position)) < 1) weaponState = "idle";
+                    if (basicSwingSpeed > 15)
+                    {
+                        GetComponent<BoxCollider2D>().size = curWeapon.transform.localScale.y * startingSize / 2.5f;
+                        GetComponent<BoxCollider2D>().offset = new Vector2(0, GetComponent<BoxCollider2D>().size.y / 2);
+                        hitStuff(EnemyList, ProjectileList, basicDmg, basicKnock, basicDeflections, deflectionSpeed);
+                    }
+                    curWeapon.transform.rotation = Quaternion.Slerp(curWeapon.transform.rotation, Quaternion.LookRotation(curWeapon.transform.forward, (curWeapon.transform.position + basicRight * basicEnd.x + basicUp * basicEnd.y) - curWeapon.transform.position), basicSwingSpeed * Time.deltaTime);
+                    if (Quaternion.Angle(curWeapon.transform.rotation, Quaternion.LookRotation(curWeapon.transform.forward, (curWeapon.transform.position + basicRight * basicEnd.x + basicUp * basicEnd.y) - curWeapon.transform.position)) < 3)
+                    {
+                        weaponState = "idle";
+                        curWeapon.transform.parent = null;
+                        transform.parent = player;
+                        transform.localPosition = Vector3.zero;
+                    }
                 }
-
             }
             else if (weaponState == "special")
             {
@@ -128,7 +169,9 @@ public class weaponHandler : MonoBehaviour {
                 playerPath.Clear();
                 weaponState = "idle";
                 lastStop = Time.time;
-                transform.parent.GetComponent<PlayerControl>().hasControl = true;
+                transform.parent = player;
+                transform.localPosition = Vector3.zero;
+                player.GetComponent<PlayerControl>().hasControl = true;
                 curWeapon.GetComponent<IWeapon>().state = "idle";
             }
         }
@@ -136,14 +179,19 @@ public class weaponHandler : MonoBehaviour {
 
     public void hitStuff(List<GameObject> enemies, List<GameObject> projectiles, float damage, float knockbackStrength, Color[] deflections, float deflectionSpeed)
     {
-        for (int i = 0; i < enemies.Count; i++)
+        while (enemies.Count > 0)
         {
             //Whack Enemy
             //Probably gonna outsource this code into the Enemy scripts, when they exist
-
-            enemies[0].GetComponent<EnemyHealth>().getHit(damage, (enemies[0].transform.position - transform.position).normalized * knockbackStrength);
-            enemies.RemoveAt(0);
-            
+            try
+            {
+                enemies[0].GetComponent<EnemyHealth>().getHit(damage, (enemies[0].transform.position - transform.position).normalized * knockbackStrength);
+                enemies.RemoveAt(0);
+            }
+            catch
+            {
+                enemies.RemoveAt(0);
+            }
         }
         while (projectiles.Count > 0)
         {
@@ -158,28 +206,28 @@ public class weaponHandler : MonoBehaviour {
 
                         //Looking into a more nuanced deflection system
                         //Using a simple turn-around for testing
-                        
+
                         if (projectiles[0].transform.parent != null)
                         {
                             //Deal with parent-child relationships
-                            projectiles[0].AddComponent<Rigidbody2D>().velocity = (projectiles[0].transform.position - transform.parent.position).normalized * deflectionSpeed;
-                            projectiles[0].GetComponent<Rigidbody2D>().gravityScale = 0;
-                            Transform rotator = projectiles[0].transform.parent;
-                            projectiles[0].transform.parent = null;
-                            rotator.GetComponent<BulletRotateAndDisperse>().children = rotator.GetComponentsInChildren<Transform>();
+                            //projectiles[0].AddComponent<Rigidbody2D>().velocity = (projectiles[0].transform.position - transform.parent.position).normalized * deflectionSpeed;
+                            //projectiles[0].GetComponent<Rigidbody2D>().gravityScale = 0;
+                            //Transform rotator = projectiles[0].transform.parent;
+                            //projectiles[0].transform.parent = null;
+                            //rotator.GetComponent<BulletRotateAndDisperse>().children = rotator.GetComponentsInChildren<Transform>();
                         }
                         else {
-                            projectiles[0].GetComponent<Rigidbody2D>().velocity = (projectiles[0].transform.position - transform.parent.position).normalized * deflectionSpeed;
+                            projectiles[0].GetComponent<Rigidbody2D>().velocity = (projectiles[0].transform.position - transform.position).normalized * deflectionSpeed;
                         }
                     }
-                    projectiles.RemoveAt(0);
                 }
                 catch (MissingReferenceException e)
                 {
-                    projectiles.RemoveAt(0);
+
                 }
 
             }
+            projectiles.RemoveAt(0);
         }
     }
 
@@ -204,14 +252,14 @@ public class weaponHandler : MonoBehaviour {
         }
         //If the path is empty, we've caught up to the player
         else {
-            curWeapon.transform.position = transform.parent.position;
+            curWeapon.transform.position = player.position;
             lastStop = Time.time;
         }
     }
 
     void trackPlayer() {
         //Keep track of player's path
-        playerPath.Add(transform.parent.position);
+        playerPath.Add(player.position);
         
     }
 
@@ -219,6 +267,14 @@ public class weaponHandler : MonoBehaviour {
     void OnTriggerEnter2D(Collider2D coll)
     {
         if (coll.gameObject.tag == "Weapon") weapons.Add(coll.transform);
+        else if (coll.gameObject.tag == "Enemy")
+        {
+            EnemyList.Add(coll.gameObject);
+        }
+        else if (coll.gameObject.tag == "Projectile")
+        {
+            ProjectileList.Add(coll.gameObject);
+        }
 
     }
 
@@ -227,13 +283,24 @@ public class weaponHandler : MonoBehaviour {
         {
             if (!weapons.Contains(coll.transform)) weapons.Add(coll.transform);
         }
+        else if (coll.gameObject.tag == "Enemy")
+        {
+            if (!EnemyList.Contains(coll.gameObject)) EnemyList.Add(coll.gameObject);
+        }
+        else if (coll.gameObject.tag == "Projectile")
+        {
+            if (!ProjectileList.Contains(coll.gameObject)) ProjectileList.Add(coll.gameObject);
+        }
+                
     }
 
     void OnTriggerExit2D(Collider2D coll) {
         if (coll.gameObject.tag == "Weapon") weapons.Remove(coll.transform);
+        else if (coll.tag == "Enemy") EnemyList.Remove(coll.gameObject);
+        else if (coll.tag == "Projectile") ProjectileList.Remove(coll.gameObject);
     }
 
-    void pickUpWeapon()
+    void findWeapon()
     {
         if (weapons.Count == 0) return;
 
@@ -250,20 +317,40 @@ public class weaponHandler : MonoBehaviour {
                 closestI = i;
             }
         }
+        pickUpWeapon(weapons[closestI].gameObject);
+    }
+
+    public void pickUpWeapon(GameObject weapon) {
+
         if (hasWeapon)
         {
             Physics2D.IgnoreCollision(GetComponent<Collider2D>(), curWeapon.GetComponent<Collider2D>(), false);
+            curWeapon.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
             curWeapon.GetComponent<IWeapon>().dropWeapon();
         }
         else {
             hasWeapon = true;
         }
-        curWeapon = weapons[closestI].gameObject;
+        curWeapon = weapon;
         curWeapon.GetComponent<IWeapon>().pickUp(gameObject);
+
+        //Map local variables to weapon stats
         swingDelay = curWeapon.GetComponent<IWeapon>().swingDelay;
+        basicDmg = curWeapon.GetComponent<IWeapon>().BasicDamage;
+        basicKnock = curWeapon.GetComponent<IWeapon>().BasicKnock;
+        basicDeflections = curWeapon.GetComponent<IWeapon>().BasicDeflections;
+        deflectionSpeed = curWeapon.GetComponent<IWeapon>().DeflectionSpeed;
+
+
         //curWeapon.gameObject.layer = 8;
+
+
+        //Weird bugs involving insta-switching weapons
+        //picking up a moving weapon is apparently dangerous
+        curWeapon.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+        curWeapon.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
         Physics2D.IgnoreCollision(GetComponent<Collider2D>(), curWeapon.GetComponent<Collider2D>(), true);
-        weapons.RemoveAt(closestI);
+        weapons.Remove(weapon.transform);
         lastAttack = Time.time - swingDelay;
     }
 
@@ -271,7 +358,7 @@ public class weaponHandler : MonoBehaviour {
         //curWeapon.GetComponent<IWeapon>().basicAttack();
 
         //New code, testing
-        if ((!attacking) && (Time.time - lastAttack > swingDelay)) {
+        if ((!attacking) && (Time.time - lastAttack >= swingDelay - 0.001f)) {
             attacking = true;
             //New transition setup
             transitioning = true;
@@ -283,7 +370,10 @@ public class weaponHandler : MonoBehaviour {
 
             weaponState = "basic";
             startRot = Quaternion.LookRotation(transform.forward, (transform.position + transform.right * basicStart.x + transform.up * basicStart.y) - transform.position);
-            transform.parent.GetComponent<PlayerControl>().hasControl = false;
+            //player.GetComponent<PlayerControl>().hasControl = false;
+            basicRight = transform.right;
+            basicUp = transform.up;
+            transform.parent = null;
         }
     }
 
@@ -298,7 +388,7 @@ public class weaponHandler : MonoBehaviour {
 
             weaponState = "special";
             startRot = Quaternion.LookRotation(transform.forward, (transform.position + transform.right * specialStart.x + transform.up * specialStart.y) - transform.position);
-            transform.parent.GetComponent<PlayerControl>().hasControl = false;
+            //player.GetComponent<PlayerControl>().hasControl = false;
         }
     }
 

@@ -28,10 +28,31 @@ public class Spear : MonoBehaviour, IWeapon
     List<GameObject> enemies = new List<GameObject>();
     List<GameObject> projectiles = new List<GameObject>();
     public float deflectionSpeed = 5.0f;
+    public float DeflectionSpeed
+    {
+        get
+        {
+            return deflectionSpeed;
+        }
+    }
 
     //Basic Attack
     public float basicDmg;
+    public float BasicDamage
+    {
+        get
+        {
+            return basicDmg;
+        }
+    }
     public float basicKnock;
+    public float BasicKnock
+    {
+        get
+        {
+            return basicKnock;
+        }
+    }
     public float basicSwingSpeed = 2.0f;
     public float _SwingDelay = 1.0f;
     public float swingDelay {
@@ -40,20 +61,27 @@ public class Spear : MonoBehaviour, IWeapon
         }
     }
     Color[] basicDeflections = new Color[1] { Color.blue };
+    public Color[] BasicDeflections
+    {
+        get
+        {
+            return basicDeflections;
+        }
+    }
 
     //Special Attack
     public Vector2 specialOffset;
     public Vector2 specialStart = new Vector2(0, 1);
     private float lastSpecial;
     public float specialSpeed = 2.0f;
-    public float specialCD = 3.0f;
+    public float specialCD = 4.0f;
     public float specialDmg;
     public float specialKnock;
     Color[] specialDeflections = new Color[1] { Color.blue };
     public Vector3 scale;
     Vector2 boxOffset;
     Vector2 boxSize;
-
+    bool impact;
     Transform player;
     //Glow Effect
     Color targetColor = Color.yellow;
@@ -81,9 +109,7 @@ public class Spear : MonoBehaviour, IWeapon
             if (localState == "pickup")
             {
                 //Had some bugs in regards to scale when the weapon drops were scaled differently than the animations
-                //Weapon would change size after the Special Attack
-                //Should fix itself if I make an animation solution for the basic attack
-                //For now, this is a messy workaround in case it gets missed
+                //This is a messy workaround
                 if (pickUpTime != Time.time)
                 {
                     occupied = true;
@@ -97,6 +123,7 @@ public class Spear : MonoBehaviour, IWeapon
             else if (localState == "basic")
             {
                 //do this
+                GetComponent<Animation>().Stop();
                 weaponCont.GetComponent<weaponHandler>().hitStuff(enemies, projectiles, basicDmg, basicKnock, basicDeflections, deflectionSpeed);
             }
             else if (localState == "special")
@@ -104,9 +131,9 @@ public class Spear : MonoBehaviour, IWeapon
                 //do this
                 if (GetComponent<Animation>().isPlaying)
                 {
-                    player.GetComponent<PlayerControl>().move(specialSpeed * player.GetComponent<PlayerControl>().moveSpeed);
+                    player.GetComponent<PlayerControl>().move(specialSpeed * player.GetComponent<PlayerControl>().moveSpeed, weaponCont.transform.up);
 
-                    if (Time.time - lastSpecial > 0.45)
+                    if (impact)
                     {
                         weaponCont.GetComponent<weaponHandler>().hitStuff(enemies, projectiles, specialDmg, specialKnock, specialDeflections, deflectionSpeed);
                     }
@@ -114,6 +141,7 @@ public class Spear : MonoBehaviour, IWeapon
                 else {
                     localState = "idle";
                     transform.parent = null;
+                    lastSpecial = Time.time;
                     GetComponent<BoxCollider2D>().offset = boxOffset;
                     GetComponent<BoxCollider2D>().size = boxSize;
                     weaponCont.GetComponent<weaponHandler>().weaponState = "idle";
@@ -122,6 +150,7 @@ public class Spear : MonoBehaviour, IWeapon
                     {
                         weaponCont.transform.localScale = new Vector3(weaponCont.transform.localScale.x * -1, weaponCont.transform.localScale.y, weaponCont.transform.localScale.z);
                     }
+                    player.GetComponent<PlayerControl>().hasControl = true;
                 }
             }
             else
@@ -129,6 +158,7 @@ public class Spear : MonoBehaviour, IWeapon
                 //Reset behavior for idle
                 if (occupied)
                 {
+                    transform.parent = null;
                     transform.position = player.transform.position + new Vector3(idleOffset.x, idleOffset.y, 0);
                     transform.up = Camera.main.transform.up;
                     occupied = false;
@@ -145,6 +175,13 @@ public class Spear : MonoBehaviour, IWeapon
 
             if (Time.time - lastSpecial > specialCD) glow();
         }
+    }
+
+    void specialImpact() {
+        impact = true;
+    }
+    void specialRelease() {
+        impact = false;
     }
 
     void glow()
@@ -165,7 +202,6 @@ public class Spear : MonoBehaviour, IWeapon
     }
     void IWeapon.specialAttack()
     {
-        lastSpecial = Time.time;
         player.GetComponent<SpriteRenderer>().color = Color.white;
         occupied = true;
         localState = "special";
@@ -185,6 +221,7 @@ public class Spear : MonoBehaviour, IWeapon
             GetComponent<Animation>().Play("SpearAttack");
         }
         player.GetComponent<PlayerControl>().invincible = true;
+        player.GetComponent<PlayerControl>().hasControl = false;
     }
     bool IWeapon.requestSpecial() {
         if ((!occupied) && (Time.time - lastSpecial > specialCD))
@@ -201,6 +238,8 @@ public class Spear : MonoBehaviour, IWeapon
         isHeld = false;
         GetComponent<Rigidbody2D>().velocity = weaponCont.transform.up * throwSpeed;
         GetComponent<Collider2D>().isTrigger = false;
+        transform.parent = null;
+        state = "idle";
     }
 
     void IWeapon.pickUp(GameObject owner)
@@ -217,7 +256,7 @@ public class Spear : MonoBehaviour, IWeapon
         weaponCont.GetComponent<weaponHandler>().specialStart = specialStart;
 
         transform.parent = weaponCont.transform;
-        GetComponent<Animation>().Play("SpearHorizontal");
+        GetComponent<Animation>().Play("SpearAttack");
     }
 
     void OnTriggerEnter2D(Collider2D coll)

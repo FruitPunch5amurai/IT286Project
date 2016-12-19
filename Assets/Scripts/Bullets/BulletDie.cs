@@ -29,7 +29,7 @@ public class BulletDie : MonoBehaviour {
             GetComponent<Rigidbody2D>().velocity = Vector2.zero;
         }
 
-        yield return new WaitForSeconds(.25f);
+        yield return new WaitForSeconds(.1f);
         try
         {
             GameManager.singleton.BulletManager.GetComponent<BulletManager>().Bullets.Remove(gameObject);
@@ -40,8 +40,7 @@ public class BulletDie : MonoBehaviour {
         }
         Destroy(gameObject);
     }
-    void OnTriggerEnter2D(Collider2D col)
-    {
+    void HandleCollisions(Collider2D col) {
         //Don't die from deflections
         if (col.tag == "Weapon" || col.tag == "Item")
         {
@@ -65,6 +64,7 @@ public class BulletDie : MonoBehaviour {
                 if (GetComponent<SpriteRenderer>().color == Color.yellow)
                 {
                     col.GetComponent<EnemyHealth>().getHit(4, Vector2.zero);
+                    col.GetComponent<EnemyAI>().KnockBack(-(transform.position - col.transform.position).normalized,2.0f);
                     Destroy();
                 }
             }
@@ -73,6 +73,14 @@ public class BulletDie : MonoBehaviour {
         else {
             Destroy();
         }
+    }
+
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        HandleCollisions(col);
+    }
+    void OnTriggerStay2D(Collider2D col) {
+        HandleCollisions(col);
     }
     void Destroy()
     {

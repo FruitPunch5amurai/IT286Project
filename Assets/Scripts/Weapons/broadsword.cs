@@ -29,7 +29,13 @@ public class broadsword : MonoBehaviour, IWeapon {
     List<GameObject> enemies = new List<GameObject>();
     List<GameObject> projectiles = new List<GameObject>();
     public float deflectionSpeed = 5.0f;
-
+    public float DeflectionSpeed
+    {
+        get
+        {
+            return deflectionSpeed;
+        }
+    }
     //Basic Attack
     public float _SwingDelay = 0.5f;
     public float swingDelay {
@@ -38,18 +44,39 @@ public class broadsword : MonoBehaviour, IWeapon {
         }
     }
     public float basicDmg;
+    public float BasicDamage
+    {
+        get
+        {
+            return basicDmg;
+        }
+    }
     public float basicKnock;
+    public float BasicKnock
+    {
+        get
+        {
+            return basicKnock;
+        }
+    }
     public float basicSwingSpeed = 2.0f;
     Color[] basicDeflections = new Color[1] { Color.blue };
+    public Color[] BasicDeflections
+    {
+        get
+        {
+            return basicDeflections;
+        }
+    }
 
     //Special Attack
     public Vector2 specialOffset;
     public Vector2 specialStart = new Vector2(0, 1);
     public float dashSpeed = 10.0f;
-    public float dashDistance = 2.0f;
+    private float dashStart;
     private float lastDash;
     public float dashTime = 1.0f;
-    public float dashCD = 3.0f;
+    public float specialCD = 1.0f;
     public float specialDmg;
     public float specialKnock;
     Color[] specialDeflections = new Color[1] { Color.blue };
@@ -63,7 +90,7 @@ public class broadsword : MonoBehaviour, IWeapon {
 
     // Use this for initialization
     void Start () {
-        lastDash = Time.time - dashCD;
+        lastDash = Time.time - specialCD;
         curColor = targetColor;
         
     }
@@ -82,13 +109,14 @@ public class broadsword : MonoBehaviour, IWeapon {
             {
                 //do this
                 weaponCont.GetComponent<weaponHandler>().hitStuff(enemies, projectiles, specialDmg, specialKnock, specialDeflections, deflectionSpeed);
-                if (Time.time - lastDash < dashTime)
+                if (Time.time - dashStart < dashTime)
                 {
-                    player.GetComponent<PlayerControl>().move(dashSpeed);
+                    player.GetComponent<PlayerControl>().move(dashSpeed, weaponCont.transform.up);
                 }
                 else {
                     localState = "idle";
                     transform.parent = null;
+                    lastDash = Time.time;
                 }
             }
             else
@@ -109,7 +137,7 @@ public class broadsword : MonoBehaviour, IWeapon {
                 }
             }
 
-            if (Time.time - lastDash > dashCD) glow();
+            if (Time.time - lastDash > specialCD) glow();
         }
 	}
 
@@ -130,9 +158,9 @@ public class broadsword : MonoBehaviour, IWeapon {
 
     void IWeapon.specialAttack()
     {
-        if ((!occupied) && (Time.time - lastDash > dashCD))
+        if ((!occupied) && (Time.time - lastDash > specialCD))
         {
-            lastDash = Time.time;
+            dashStart = Time.time;
             player.GetComponent<SpriteRenderer>().color = Color.white;
             occupied = true;
             transform.position = player.transform.position + new Vector3(specialOffset.x, specialOffset.y, 0);
@@ -144,7 +172,7 @@ public class broadsword : MonoBehaviour, IWeapon {
 
     bool IWeapon.requestSpecial()
     {
-        if ((!occupied) && (Time.time - lastDash > dashCD))
+        if ((!occupied) && (Time.time - lastDash > specialCD))
         {
             return true;
         }

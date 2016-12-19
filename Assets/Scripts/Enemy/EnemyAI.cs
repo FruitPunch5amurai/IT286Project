@@ -3,10 +3,13 @@ using Pathfinding;
 using System.Threading;
 using System.Collections;
 
-[RequireComponent (typeof (Rigidbody2D))]
 public abstract class EnemyAI : MonoBehaviour {
 
     public float Speed;
+    protected float m_IdleTime;
+    protected float m_LastTimeKnockedBack;
+    public bool CanKnockBack;
+    public bool IsABoss;
 
     //Enemies current room
     public GameObject CurrentRoom;
@@ -35,10 +38,23 @@ public abstract class EnemyAI : MonoBehaviour {
     {
         Patrol,
         Attack,
+        Teleporting,
+        Idle,
+        KnockedBack
+
     }
 
+    protected State state
+    {
+        get { return CurrentState; }
+        set
+        {
+            PreviousState = CurrentState;
+            CurrentState = value;
+        }
+    }
     public State CurrentState;
-
+    public State PreviousState;
 
 
     // Use this for initialization
@@ -47,7 +63,7 @@ public abstract class EnemyAI : MonoBehaviour {
         rb = GetComponent<Rigidbody2D>();
         m_Player = GameManager.singleton.Player;
         m_enemyAttack = GetComponent<EnemyAttack>();
-
+        IsABoss = false;
 	}
 
     public void OnPathComplete(Path p)
@@ -78,5 +94,24 @@ public abstract class EnemyAI : MonoBehaviour {
     {
 
     }
+    protected virtual void Move()
+    {
+        //Find direction to next node
+        Vector3 direction = (path.vectorPath[CurrentWaypoint] - transform.position).normalized;
+        direction *= Speed * Time.fixedDeltaTime;
+        direction.z = 0;
+        //Time to move the AI!
+        rb.transform.Translate(direction);
 
+    }
+    public virtual void KnockBack(Vector2 dir,float force)
+    {
+        if (state == State.KnockedBack || Time.time - m_LastTimeKnockedBack < 1f || !CanKnockBack)
+            return;
+        state = State.KnockedBack;
+        m_IdleTime = Time.time + 1f;
+        m_LastTimeKnockedBack = Time.time;
+        rb.AddForce(dir, ForceMode2D.Impulse);
+    }
+    
 }
