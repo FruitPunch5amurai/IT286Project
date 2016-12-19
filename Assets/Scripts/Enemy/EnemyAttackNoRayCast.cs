@@ -19,7 +19,7 @@ public class EnemyAttackNoRayCast : EnemyAttack {
 	// Update is called once per frame
 	protected override void FixedUpdate () {
         base.FixedUpdate();
-        if (m_timeUntilCanAttack <= Time.time)
+        if (m_timeUntilCanAttack <= Time.time && m_BulletManager.CheckIfCanBullet())
         {
             
             if (m_EnemyAI.CurrentState == EnemyAI.State.Attack && m_BulletManager.CheckIfCanBullet())

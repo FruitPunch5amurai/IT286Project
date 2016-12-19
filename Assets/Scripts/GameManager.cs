@@ -133,6 +133,7 @@ public class GameManager : MonoBehaviour {
         else
             SpawnEnemies(Room);
         BulletManager.GetComponent<BulletManager>().ClearBullets();
+
     }
 
     /*
@@ -140,7 +141,9 @@ public class GameManager : MonoBehaviour {
      */
     public void AdjustAStarGridToRoom(GameObject Room)
     {
-        AStarGrid.GetComponent<AstarPath>().astarData.gridGraph.center = Room.transform.position;
+        if (AStarGrid.GetComponent<AstarPath>() == null)
+            return;
+        Debug.Log(AStarGrid.GetComponent<AstarPath>().astarData.gridGraph.center.x) ;//= Room.transform.position;
         AstarPath.active.Scan();
     }
 

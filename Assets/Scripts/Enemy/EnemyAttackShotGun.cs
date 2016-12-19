@@ -16,7 +16,7 @@ public class EnemyAttackShotGun : EnemyAttack {
     protected override void FixedUpdate()
     {
         base.FixedUpdate();
-        if (m_timeUntilCanAttack <= Time.time)
+        if (m_timeUntilCanAttack <= Time.time && m_BulletManager.CheckIfCanBullet())
         {
             if (Target != null)
             {

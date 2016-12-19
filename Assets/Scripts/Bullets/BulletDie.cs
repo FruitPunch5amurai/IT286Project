@@ -40,8 +40,7 @@ public class BulletDie : MonoBehaviour {
         }
         Destroy(gameObject);
     }
-    void OnTriggerEnter2D(Collider2D col)
-    {
+    void HandleCollisions(Collider2D col) {
         //Don't die from deflections
         if (col.tag == "Weapon" || col.tag == "Item")
         {
@@ -74,6 +73,14 @@ public class BulletDie : MonoBehaviour {
         else {
             Destroy();
         }
+    }
+
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        HandleCollisions(col);
+    }
+    void OnTriggerStay2D(Collider2D col) {
+        HandleCollisions(col);
     }
     void Destroy()
     {

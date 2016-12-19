@@ -31,6 +31,11 @@ public class Hammer : MonoBehaviour, IWeapon
     List<GameObject> enemies = new List<GameObject>();
     List<GameObject> projectiles = new List<GameObject>();
     float deflectionSpeed = 2.0f;
+    public float DeflectionSpeed {
+        get {
+            return deflectionSpeed;
+        }
+    }
 
 
     //Basic Attack
@@ -41,9 +46,24 @@ public class Hammer : MonoBehaviour, IWeapon
         }
     }
     public float basicDmg;
+    public float BasicDamage {
+        get {
+            return basicDmg;
+        }
+    }
     public float basicKnock;
+    public float BasicKnock {
+        get {
+            return basicKnock;
+        }
+    }
     public float basicSwingSpeed = 2.0f;
-    Color[] basicDeflections = new Color[1] { Color.blue };
+    Color[] basicDeflections = new Color[2] { Color.blue, Color.red };
+    public Color[] BasicDeflections {
+        get {
+            return basicDeflections;
+        }
+    }
 
     //Special Attack
     public Vector2 specialOffset;
@@ -53,13 +73,15 @@ public class Hammer : MonoBehaviour, IWeapon
     public float numSpins = 2;
     float spinCounter = 0.0f;
     bool startedSpin;
+    float spinStartTime;
     Quaternion prevRot;
     private float lastSpin;
-    public float spinTime = 1.0f;
-    public float spinCD = 3.0f;
+    public float spinCD = 4.0f;
     public float specialDmg;
     public float specialKnock;
-    Color[] specialDeflections = new Color[1] { Color.blue };
+    Color[] specialDeflections = new Color[2] { Color.blue, Color.red };
+
+    public float MovementSpeedMultipler;
 
     Transform player;
     GameObject weaponCont;
@@ -92,7 +114,19 @@ public class Hammer : MonoBehaviour, IWeapon
             else if (localState == "special")
             {
                 //do this
+                //Slow the enemies down
+                for (int i = 0; i < enemies.Count; i++)
+                {
+                    enemies[i].AddComponent<SlowStatusEffect>();
+                }
+
                 weaponCont.GetComponent<weaponHandler>().hitStuff(enemies, projectiles, specialDmg, specialKnock, specialDeflections, deflectionSpeed);
+
+                //Stay on the player
+                transform.position = player.transform.position;
+
+
+
                 if ((Mathf.Abs(Quaternion.Angle(weaponCont.transform.rotation, specialStart)) > 45) || (startedSpin))
                 {
                     if (!startedSpin)
@@ -107,8 +141,11 @@ public class Hammer : MonoBehaviour, IWeapon
                     {
                         localState = "idle";
                         weaponCont.transform.rotation = specialStart;
+                        lastSpin = Time.time;
                         transform.parent = null;
                         weaponCont.GetComponent<weaponHandler>().weaponState = "idle";
+                        player.GetComponent<PlayerControl>().spinning = false;
+                        player.GetComponent<PlayerControl>().moveSpeed *= 1 / MovementSpeedMultipler;
                     }
                     else if (spinCounter > 360 * numSpins - 45)
                     {
@@ -123,7 +160,7 @@ public class Hammer : MonoBehaviour, IWeapon
                 }
                 else
                 {
-                    newSpinSpeed = spinSpeed + 0.1f * (Time.time - lastSpin);
+                    newSpinSpeed = spinSpeed + 0.1f * (Time.time - spinStartTime);
                     prevRot = weaponCont.transform.rotation;
                     weaponCont.transform.rotation = Quaternion.Lerp(weaponCont.transform.rotation, spinTarget, newSpinSpeed);
                 }
@@ -170,14 +207,16 @@ public class Hammer : MonoBehaviour, IWeapon
         if ((!occupied) && (Time.time - lastSpin > spinCD))
         {
             transform.parent = weaponCont.transform;
-            lastSpin = Time.time;
+            spinStartTime = Time.time;
             spinCounter = 0.0f;
             player.GetComponent<SpriteRenderer>().color = Color.white;
             occupied = true;
             transform.localPosition = specialOffset;
             specialStart = weaponCont.transform.rotation;
             localState = "special";
-            player.GetComponent<PlayerControl>().hasControl = false;
+            //player.GetComponent<PlayerControl>().hasControl = false;
+            player.GetComponent<PlayerControl>().spinning = true;
+            player.GetComponent<PlayerControl>().moveSpeed *= MovementSpeedMultipler;
             spinTarget = Quaternion.LookRotation(weaponCont.transform.forward, weaponCont.transform.right);
             startedSpin = false;
         }

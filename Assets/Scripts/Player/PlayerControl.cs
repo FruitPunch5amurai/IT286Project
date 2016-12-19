@@ -12,6 +12,7 @@ public class PlayerControl : MonoBehaviour
     public float moveSpeed = 2.0f;
     public bool hasControl = true;
     public bool invincible = false;
+    public bool spinning = false;
     public LayerMask RayCastIgnore;
     public GameObject WeaponController;
 
@@ -30,21 +31,22 @@ public class PlayerControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //if (GameManager.singleton.CurrentGameState != GameManager.GameState.Play) return;
+        if (GameManager.singleton.CurrentGameState != GameManager.GameState.Play) return;
         if (hasControl)
         {
             //Rotate Weapon Hitbox
-            if ((Input.GetAxisRaw("Horizontal") != 0) || (Input.GetAxisRaw("Vertical") != 0))
-                transform.GetChild(0).rotation = Quaternion.LookRotation(transform.forward, (Camera.main.transform.right * Input.GetAxisRaw("Horizontal") + Camera.main.transform.up * Input.GetAxisRaw("Vertical")));
-
+            if (WeaponController.GetComponent<weaponHandler>().weaponState == "idle")
+            {
+                if ((Input.GetAxisRaw("Horizontal") != 0) || (Input.GetAxisRaw("Vertical") != 0))
+                    WeaponController.transform.rotation = Quaternion.LookRotation(transform.forward, (Camera.main.transform.right * Input.GetAxisRaw("Horizontal") + Camera.main.transform.up * Input.GetAxisRaw("Vertical")));
+            }
             if ((Input.GetAxisRaw("Horizontal") != 0) || (Input.GetAxisRaw("Vertical") != 0))
             {
-                move(moveSpeed);
+                move(moveSpeed, Camera.main.transform.right * Input.GetAxisRaw("Horizontal") + Camera.main.transform.up * Input.GetAxisRaw("Vertical"));
             }
 
 
-            //Change Sprites, waiting for Input
-
+            //Change Sprites
             if (Input.GetKey(KeyCode.UpArrow))
             {
                 GetComponent<SpriteRenderer>().sprite = n;
@@ -71,7 +73,8 @@ public class PlayerControl : MonoBehaviour
             }
 
         }
-        else {
+        if ((spinning) || (!hasControl)) {
+            //If we can't go off of player input, make some assumptions
             if (Mathf.Abs(WeaponController.transform.up.y) <= Mathf.Abs(WeaponController.transform.up.x))
             {
                 if (WeaponController.transform.up.x > 0)
@@ -79,11 +82,13 @@ public class PlayerControl : MonoBehaviour
                     //right 
                     GetComponent<SpriteRenderer>().sprite = e;
                     GetComponent<SpriteRenderer>().flipX = true;
+                    orientation = "e";
                 }
                 else {
                     //left
                     GetComponent<SpriteRenderer>().sprite = e;
                     GetComponent<SpriteRenderer>().flipX = false;
+                    orientation = "w";
                 }
             }
             else {
@@ -92,11 +97,13 @@ public class PlayerControl : MonoBehaviour
                     //up
                     GetComponent<SpriteRenderer>().sprite = n;
                     GetComponent<SpriteRenderer>().flipX = false;
+                    orientation = "n";
                 }
                 else {
                     //down
                     GetComponent<SpriteRenderer>().sprite = s;
                     GetComponent<SpriteRenderer>().flipX = false;
+                    orientation = "s";
                 }
             }
         }
@@ -109,24 +116,33 @@ public class PlayerControl : MonoBehaviour
         //Else.... recovery behaviour?
     }
 
-    public void move(float speed)
+    public void move(float speed, Vector3 direction)
     {
-        Vector3 input = WeaponController.transform.up * Time.deltaTime * speed;
-
+        Vector3 input = direction * Time.deltaTime * speed;
+        //The "easy" way
+        //transform.Translate(input);
+        
+        //The "I forgot that function's a thing" way
         RaycastHit2D move;
         RaycastHit2D move2;
+        
         move2 = Physics2D.Raycast(transform.position, new Vector2(input.x, 0), GetComponent<BoxCollider2D>().size.x * transform.lossyScale.x / 2, ~RayCastIgnore);
         if (input.x < 0)
         {
-            move = Physics2D.BoxCast(transform.position + Camera.main.transform.right * GetComponent<BoxCollider2D>().size.x * -1, GetComponent<BoxCollider2D>().size, 360, new Vector2(input.x, 0), input.x, ~RayCastIgnore);
+            move = Physics2D.BoxCast(transform.position, GetComponent<BoxCollider2D>().size, 360, new Vector2(input.x, 0), input.x, ~RayCastIgnore);
         }
         else
         {
-            move = Physics2D.BoxCast(transform.position + Camera.main.transform.right * GetComponent<BoxCollider2D>().size.x * 1, GetComponent<BoxCollider2D>().size, 360, new Vector2(input.x, 0), input.x, ~RayCastIgnore);
+            move = Physics2D.BoxCast(transform.position, GetComponent<BoxCollider2D>().size, 360, new Vector2(input.x, 0), input.x, ~RayCastIgnore);
         }
         if (!move2)
         {
             if (!move) transform.position = transform.position + new Vector3(input.x, 0, 0);
+            else
+            {
+                Debug.Log("Weird");
+                transform.Translate(input);
+            }
         }
         else
         {
@@ -137,19 +153,25 @@ public class PlayerControl : MonoBehaviour
         move2 = Physics2D.Raycast(transform.position, new Vector2(0, input.y), GetComponent<BoxCollider2D>().size.y * transform.lossyScale.y / 2, ~RayCastIgnore);
         if (input.y < 0)
         {
-            move = Physics2D.BoxCast(transform.position + Camera.main.transform.up * GetComponent<BoxCollider2D>().size.y * -1, GetComponent<BoxCollider2D>().size, 360, new Vector2(0, input.y), input.y, ~RayCastIgnore);
+            move = Physics2D.BoxCast(transform.position, GetComponent<BoxCollider2D>().size, 360, new Vector2(0, input.y), input.y, ~RayCastIgnore);
         }
         else
         {
-            move = Physics2D.BoxCast(transform.position + Camera.main.transform.up * GetComponent<BoxCollider2D>().size.y * 1, GetComponent<BoxCollider2D>().size, 360, new Vector2(0, input.y), input.y, ~RayCastIgnore);
+            move = Physics2D.BoxCast(transform.position, GetComponent<BoxCollider2D>().size, 360, new Vector2(0, input.y), input.y, ~RayCastIgnore);
         }
         if (!move2)
         {
             if (!move) transform.position = transform.position + new Vector3(0, input.y, 0);
+            else
+            {
+                Debug.Log("Weird");
+                transform.Translate(input);
+            }
         }
         else {
             transform.position = transform.position + new Vector3(move.centroid.x, move.centroid.y, 0);
         }
+        
     }
 
     public void DamagePlayer() {

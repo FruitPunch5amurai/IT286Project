@@ -11,6 +11,19 @@ public interface IWeapon {
     float swingDelay {
         get;
     }
+
+    float BasicDamage {
+        get;
+    }
+    float BasicKnock {
+        get;
+    }
+    Color[] BasicDeflections {
+        get;
+    }
+    float DeflectionSpeed {
+        get;
+    }
     bool requestSpecial();
     void specialAttack();
     void dropWeapon();

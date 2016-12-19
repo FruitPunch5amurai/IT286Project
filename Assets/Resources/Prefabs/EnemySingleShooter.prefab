@@ -178,8 +178,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b56ae2f00c08fb4280cfbb8aaf467c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Speed: 0.4
+  CurrentRoom: {fileID: 0}
+  NextWayPointDistance: 0.1
+  PathHasEnded: 0
+  Target: {x: 0, y: 0, z: 0}
+  FMode: 0
+  CurrentState: 0
+--- !u!114 &114000010775719088
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000010076840742}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b56ae2f00c08fb4280cfbb8aaf467c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   PossibleItemDrops:
-  - {fileID: 0}
+  - {fileID: 1000011694525368, guid: 784c8980dbff2e346b2e79e36fba5ba9, type: 2}
   ItemDropRatePercent: 20
 --- !u!114 &114000011329273814
 MonoBehaviour:
