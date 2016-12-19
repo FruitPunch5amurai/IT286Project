@@ -22,6 +22,7 @@ public class KeyScript : MonoBehaviour, IKeyLock {
 
     void OnTriggerEnter2D(Collider2D col)
     {
+        Debug.Log("Key Trigger");
         if (col.tag == "Player")
         {
             Debug.Log("Picked Up BossKey");

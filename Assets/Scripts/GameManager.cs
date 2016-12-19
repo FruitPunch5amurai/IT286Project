@@ -143,7 +143,7 @@ public class GameManager : MonoBehaviour {
     {
         if (AStarGrid.GetComponent<AstarPath>() == null)
             return;
-        Debug.Log(AStarGrid.GetComponent<AstarPath>().astarData.gridGraph.center.x) ;//= Room.transform.position;
+        AStarGrid.GetComponent<AstarPath>().astarData.gridGraph.center = Room.transform.position;
         AstarPath.active.Scan();
     }
 
