@@ -120,25 +120,29 @@ public class PlayerControl : MonoBehaviour
     {
         Vector3 input = direction * Time.deltaTime * speed;
         //The "easy" way
-        transform.Translate(input);
-
-        //Generally handles collisions better
-        //Couldn't figure out a few edge cases, so won't be used in the final build
-        /*
+        //transform.Translate(input);
+        
+        //The "I forgot that function's a thing" way
         RaycastHit2D move;
         RaycastHit2D move2;
+        
         move2 = Physics2D.Raycast(transform.position, new Vector2(input.x, 0), GetComponent<BoxCollider2D>().size.x * transform.lossyScale.x / 2, ~RayCastIgnore);
         if (input.x < 0)
         {
-            move = Physics2D.BoxCast(transform.position + Camera.main.transform.right * GetComponent<BoxCollider2D>().size.x * -1, GetComponent<BoxCollider2D>().size, 360, new Vector2(input.x, 0), input.x, ~RayCastIgnore);
+            move = Physics2D.BoxCast(transform.position, GetComponent<BoxCollider2D>().size, 360, new Vector2(input.x, 0), input.x, ~RayCastIgnore);
         }
         else
         {
-            move = Physics2D.BoxCast(transform.position + Camera.main.transform.right * GetComponent<BoxCollider2D>().size.x * 1, GetComponent<BoxCollider2D>().size, 360, new Vector2(input.x, 0), input.x, ~RayCastIgnore);
+            move = Physics2D.BoxCast(transform.position, GetComponent<BoxCollider2D>().size, 360, new Vector2(input.x, 0), input.x, ~RayCastIgnore);
         }
         if (!move2)
         {
             if (!move) transform.position = transform.position + new Vector3(input.x, 0, 0);
+            else
+            {
+                Debug.Log("Weird");
+                transform.Translate(input);
+            }
         }
         else
         {
@@ -149,20 +153,25 @@ public class PlayerControl : MonoBehaviour
         move2 = Physics2D.Raycast(transform.position, new Vector2(0, input.y), GetComponent<BoxCollider2D>().size.y * transform.lossyScale.y / 2, ~RayCastIgnore);
         if (input.y < 0)
         {
-            move = Physics2D.BoxCast(transform.position + Camera.main.transform.up * GetComponent<BoxCollider2D>().size.y * -1, GetComponent<BoxCollider2D>().size, 360, new Vector2(0, input.y), input.y, ~RayCastIgnore);
+            move = Physics2D.BoxCast(transform.position, GetComponent<BoxCollider2D>().size, 360, new Vector2(0, input.y), input.y, ~RayCastIgnore);
         }
         else
         {
-            move = Physics2D.BoxCast(transform.position + Camera.main.transform.up * GetComponent<BoxCollider2D>().size.y * 1, GetComponent<BoxCollider2D>().size, 360, new Vector2(0, input.y), input.y, ~RayCastIgnore);
+            move = Physics2D.BoxCast(transform.position, GetComponent<BoxCollider2D>().size, 360, new Vector2(0, input.y), input.y, ~RayCastIgnore);
         }
         if (!move2)
         {
             if (!move) transform.position = transform.position + new Vector3(0, input.y, 0);
+            else
+            {
+                Debug.Log("Weird");
+                transform.Translate(input);
+            }
         }
         else {
             transform.position = transform.position + new Vector3(move.centroid.x, move.centroid.y, 0);
         }
-        */
+        
     }
 
     public void DamagePlayer() {
