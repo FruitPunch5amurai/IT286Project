@@ -162,11 +162,11 @@ public class weaponHandler : MonoBehaviour {
                         if (projectiles[0].transform.parent != null)
                         {
                             //Deal with parent-child relationships
-                            projectiles[0].AddComponent<Rigidbody2D>().velocity = (projectiles[0].transform.position - transform.parent.position).normalized * deflectionSpeed;
-                            projectiles[0].GetComponent<Rigidbody2D>().gravityScale = 0;
-                            Transform rotator = projectiles[0].transform.parent;
-                            projectiles[0].transform.parent = null;
-                            rotator.GetComponent<BulletRotateAndDisperse>().children = rotator.GetComponentsInChildren<Transform>();
+                            //projectiles[0].AddComponent<Rigidbody2D>().velocity = (projectiles[0].transform.position - transform.parent.position).normalized * deflectionSpeed;
+                            //projectiles[0].GetComponent<Rigidbody2D>().gravityScale = 0;
+                            //Transform rotator = projectiles[0].transform.parent;
+                            //projectiles[0].transform.parent = null;
+                            //rotator.GetComponent<BulletRotateAndDisperse>().children = rotator.GetComponentsInChildren<Transform>();
                         }
                         else {
                             projectiles[0].GetComponent<Rigidbody2D>().velocity = (projectiles[0].transform.position - transform.parent.position).normalized * deflectionSpeed;

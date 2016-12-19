@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Name: DungeonFlow
   m_EditorClassIdentifier: 
   Length:
-    Min: 5
-    Max: 10
+    Min: 3
+    Max: 5
   GlobalPropGroupIDs: 
   GlobalPropRanges: []
   KeyManager: {fileID: 11400000, guid: 6d080c41f766f2444ab2c269706fb7cd, type: 2}
@@ -26,26 +26,22 @@ MonoBehaviour:
     NodeType: 1
     Position: 0
     Label: Start
-    Keys:
-    - ID: 0
-      Range:
-        Min: 0
-        Max: 1
+    Keys: []
+    Locks: []
+    LockPlacement: -1
+  - Graph: {fileID: 11400000}
+    TileSets:
+    - {fileID: 11400000, guid: a53826d9d5005e24082d746e73c7554b, type: 2}
+    NodeType: 2
+    Position: 1
+    Label: Goal
+    Keys: []
     Locks:
     - ID: 0
       Range:
         Min: 0
         Max: 1
-    LockPlacement: -1
-  - Graph: {fileID: 11400000}
-    TileSets:
-    - {fileID: 11400000, guid: 1a936fa94085ac54285bb52384e4fac2, type: 2}
-    NodeType: 2
-    Position: 1
-    Label: Goal
-    Keys: []
-    Locks: []
-    LockPlacement: 0
+    LockPlacement: 1
   Lines:
   - Graph: {fileID: 11400000}
     DungeonArchetypes:
@@ -57,8 +53,4 @@ MonoBehaviour:
       Range:
         Min: 0
         Max: 1
-    Locks:
-    - ID: 0
-      Range:
-        Min: 1
-        Max: 1
+    Locks: []

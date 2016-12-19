@@ -127,6 +127,40 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1428560357217844
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4024176510257940}
+  - component: {fileID: 61111925291466056}
+  - component: {fileID: 50206926351211626}
+  - component: {fileID: 114462379738737476}
+  m_Layer: 11
+  m_Name: sword
+  m_TagString: Weapon
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1743179900685264
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4946409676063598}
+  - component: {fileID: 212762475315109860}
+  m_Layer: 11
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!4 &4000010229789252
 Transform:
   m_ObjectHideFlags: 1
@@ -180,6 +214,7 @@ Transform:
   - {fileID: 4000012967303622}
   - {fileID: 4000012679350164}
   - {fileID: 4000011843859036}
+  - {fileID: 4024176510257940}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
@@ -224,6 +259,33 @@ Transform:
   m_Father: {fileID: 4000012967303622}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4024176510257940
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1428560357217844}
+  m_LocalRotation: {x: -0, y: -0, z: 0.49536595, w: 0.8686845}
+  m_LocalPosition: {x: -0.14179951, y: -0.9013293, z: -0.07}
+  m_LocalScale: {x: 0.357603, y: 2.3648195, z: 1.535545}
+  m_Children:
+  - {fileID: 4946409676063598}
+  m_Father: {fileID: 4000012070579214}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 59.346004}
+--- !u!4 &4946409676063598
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1743179900685264}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.0691, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4024176510257940}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &50000010841613244
 Rigidbody2D:
   serializedVersion: 4
@@ -244,6 +306,26 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 7
+--- !u!50 &50206926351211626
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1428560357217844}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 5
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!54 &54000011029529876
 Rigidbody:
   m_ObjectHideFlags: 1
@@ -288,6 +370,20 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 0.65, y: 0.81}
+--- !u!61 &61111925291466056
+BoxCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1428560357217844}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_Offset: {x: 0, y: 0.07}
+  serializedVersion: 2
+  m_Size: {x: 0.16, y: 0.15}
 --- !u!65 &65000010484224536
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -312,7 +408,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ListOfEnemies:
-  - {fileID: 1000010907435496, guid: a10e459b6ec570040932af916b555583, type: 2}
+  - {fileID: 1736528336229516, guid: f08affd10eb9c1e4e9489e4c974c998f, type: 2}
   AmountOfEnemies: 01000000
   GenerateRandomAmount: 0
 --- !u!114 &114000011082538330
@@ -385,6 +481,37 @@ MonoBehaviour:
   line:
     flow: {fileID: 0}
     index: 0
+--- !u!114 &114462379738737476
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1428560357217844}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43445e1dcf9b54f4c9b46d9ff725965b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  throwSpeed: 25
+  weaponCont: {fileID: 0}
+  idleOffset: {x: 0, y: 0}
+  occupied: 0
+  deflectionSpeed: 5
+  _SwingDelay: 0.5
+  basicDmg: 0
+  basicKnock: 0
+  basicSwingSpeed: 2
+  specialOffset: {x: 0, y: 0}
+  specialStart: {x: 0, y: 1}
+  dashSpeed: 10
+  dashDistance: 2
+  dashTime: 1
+  dashCD: 3
+  specialDmg: 0
+  specialKnock: 0
+  targetColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  glowSpeed: 0.005
+  colorThreshold: 0.1
 --- !u!212 &212000012122754610
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -452,6 +579,41 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300002, guid: cd376fd37b3fbf448b5d958d25e7cddc, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+--- !u!212 &212762475315109860
+SpriteRenderer:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1743179900685264}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 0
+  m_ReflectionProbeUsage: 0
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

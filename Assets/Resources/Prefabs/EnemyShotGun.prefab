@@ -23,9 +23,9 @@ GameObject:
   - component: {fileID: 114000010299754640}
   - component: {fileID: 50000011619902916}
   - component: {fileID: 61000012300622136}
-  - component: {fileID: 114000012840984574}
   - component: {fileID: 114000011193010786}
   - component: {fileID: 114978365049661280}
+  - component: {fileID: 114497072858621862}
   m_Layer: 8
   m_Name: EnemyShotGun
   m_TagString: Enemy
@@ -194,7 +194,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec243b804ea94194484ff473fa2bf221, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114000012840984574
+--- !u!114 &114497072858621862
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -202,7 +202,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1000010907435496}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: efb7432aac539b6449051d527e8327d2, type: 3}
+  m_Script: {fileID: 11500000, guid: e6782808383518649b06ba73684aea53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Speed: 0.4
@@ -212,6 +212,7 @@ MonoBehaviour:
   Target: {x: 0, y: 0, z: 0}
   FMode: 0
   CurrentState: 0
+  PreviousState: 0
 --- !u!114 &114978365049661280
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour {
     public GameObject Player;
     public GameObject AStarGrid;
     public GameObject BulletManager;
+    public GameObject Canvas;
     public List<GameObject> CurrentRoomEnemies;
     public List<GameObject> PathRequests;
 
@@ -105,7 +106,10 @@ public class GameManager : MonoBehaviour {
         Dungeon.layer = 10;
         m_RootRoom = Dungeon.transform.GetChild(0).gameObject;
         SpawnPlayer(new Vector2(m_RootRoom.transform.GetChild(0).position.x, m_RootRoom.transform.GetChild(0).position.y));
-        SpawnEnemies(Player.GetComponent<PlayerControl>().CurrentRoom);
+        if (m_RootRoom.GetComponent<Enemies>().GenerateRandomAmount == true)
+            SpawnEnemiesRandom(m_RootRoom);
+        else
+            SpawnEnemies(m_RootRoom);
         Camera.main.GetComponent<CameraMove>().Focus = Player;
         Camera.main.GetComponent<CameraMove>().SetCameraBoundary();
         AdjustAStarGridToRoom(m_RootRoom);
@@ -116,6 +120,7 @@ public class GameManager : MonoBehaviour {
      */
     public void TransitionRoom(GameObject Room, Vector3 NewPosition)
     {
+        Debug.Log("RoomTransition");
         PlayerControl pm = Player.GetComponent<PlayerControl>();
         RemoveEnemiesFromRoom(pm.CurrentRoom);
         pm.CurrentRoom = Room;
@@ -123,9 +128,11 @@ public class GameManager : MonoBehaviour {
         Player.transform.position = new Vector3(NewPosition.x, NewPosition.y, -.001f);
         Camera.main.GetComponent<CameraMove>().SetCameraBoundary();
         AdjustAStarGridToRoom(Room);
-        SpawnEnemies(Room);
-
-        //BulletManager.GetComponent<BulletManager>().ClearBullets();
+        if (Room.GetComponent<Enemies>().GenerateRandomAmount == true)
+            SpawnEnemiesRandom(Room);
+        else
+            SpawnEnemies(Room);
+        BulletManager.GetComponent<BulletManager>().ClearBullets();
     }
 
     /*
@@ -133,9 +140,7 @@ public class GameManager : MonoBehaviour {
      */
     public void AdjustAStarGridToRoom(GameObject Room)
     {
-        if (AStarGrid.GetComponent<AstarPath>() == null)
-            return;
-        Debug.Log(AStarGrid.GetComponent<AstarPath>().astarData.gridGraph.center.x) ;//= Room.transform.position;
+        AStarGrid.GetComponent<AstarPath>().astarData.gridGraph.center = Room.transform.position;
         AstarPath.active.Scan();
     }
 
@@ -144,13 +149,16 @@ public class GameManager : MonoBehaviour {
      */
     public void RemoveEnemiesFromRoom(GameObject Room)
     {
-        foreach(GameObject enemy in CurrentRoomEnemies)
+        foreach (GameObject enemy in CurrentRoomEnemies)
         {
-            if (enemy.GetComponent<EnemyAI>().path != null)
+            if (enemy != null)
             {
-                enemy.GetComponent<EnemyAI>().path.Release(enemy);
+                if (enemy.GetComponent<EnemyAI>().path != null)
+                {
+                    enemy.GetComponent<EnemyAI>().path.Release(enemy);
+                }
+                Destroy(enemy);
             }
-            Destroy(enemy);
         }
         CurrentRoomEnemies.Clear();
     }
@@ -168,13 +176,33 @@ public class GameManager : MonoBehaviour {
             int amount = enemies.AmountOfEnemies[i];
             for(int j = 0; j < amount;j++)
             {
-                enemy = (GameObject)Instantiate(enemies.ListOfEnemies[i], new Vector3(0,0,-.001f), rot);
+                enemy = (GameObject)Instantiate(enemies.ListOfEnemies[i], new Vector3(Room.transform.position.x, Room.transform.position.y, -.001f), rot);
                 enemy.GetComponent<EnemyAI>().CurrentRoom = Player.GetComponent<PlayerControl>().CurrentRoom;
                 CurrentRoomEnemies.Add(enemy);
             }
         }
     }
+    public void SpawnEnemiesRandom(GameObject Room)
+    {
+        Enemies enemies = Room.GetComponent<Enemies>();
+        GameObject enemy;
+        if (enemies.ListOfEnemies.Count == 0)
+            return;
+        int Amount = Random.Range(3, 6);
+        for (int i = 0; i < Amount; i++)
+        {
+            int index = Random.Range(0, enemies.ListOfEnemies.Count);
+            enemy = (GameObject)Instantiate(enemies.ListOfEnemies[index], new Vector3(Room.transform.position.x, Room.transform.position.y, -.001f), Quaternion.identity);
+            enemy.GetComponent<EnemyAI>().CurrentRoom = Player.GetComponent<PlayerControl>().CurrentRoom;
+            CurrentRoomEnemies.Add(enemy);
+        }
+    }
 
+    public IEnumerator ProceedToNextStage()
+    {
+        yield return new WaitForSeconds(2f);
+        PlayerDeathRestart();
+    }
     IEnumerator ProcessPathRequests()
     {
         if (PathRequests.Count > 0)

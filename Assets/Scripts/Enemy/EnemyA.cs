@@ -27,7 +27,7 @@ public class EnemyA :EnemyAI{
         //Check to see if we are at our last node in our path
         if (CurrentWaypoint >= path.vectorPath.Count)
         {
-            //Debug.Log("End of Path Reached");
+            Debug.Log("End of Path Reached");
             PathHasEnded = true;
             UpdateTarget();
             return;
@@ -35,9 +35,15 @@ public class EnemyA :EnemyAI{
         PathHasEnded = false;
        //TODO: define Attack behavior
 
-       switch (CurrentState)
+        
+       switch (state)
        {
-           case State.Attack:
+           case State.Idle:
+                if (m_IdleTime < Time.time)
+                    state = PreviousState;
+                return;
+
+            case State.Attack:
                if (Vector3.Distance(Target, GameManager.singleton.Player.transform.position) > 1f)
                {
                    PathHasEnded = true;
@@ -63,7 +69,7 @@ public class EnemyA :EnemyAI{
        
                if (Vector3.Distance(transform.position, GameManager.singleton.Player.transform.position) < .8f)
                {
-                   CurrentState = State.Attack;
+                    state = State.Attack;
                     m_enemyAttack.Target = GameManager.singleton.Player;
                     PathHasEnded = true;
                     UpdateTarget();
@@ -73,18 +79,10 @@ public class EnemyA :EnemyAI{
            default:
                break;
        }
-        //Find direction to next node
-        Vector3 direction = (path.vectorPath[CurrentWaypoint] - transform.position).normalized;
-        direction *= Speed * Time.fixedDeltaTime;
-        direction.z = 0;
-        //Time to move the AI!
 
-        rb.transform.Translate(direction);
-        //if ((transform.position - Target).sqrMagnitude < .1f)
-        //{
-        //    UpdateTarget();
-        //}
-
+        //Move AI
+        Move();
+        
         if (Vector3.Distance(transform.position, path.vectorPath[CurrentWaypoint]) < NextWayPointDistance)
         {
             CurrentWaypoint++;
@@ -95,13 +93,13 @@ public class EnemyA :EnemyAI{
     {
         base.UpdateTarget();
         Vector3 destination = new Vector3(0, 0, 0);
-        if (CurrentState == State.Patrol)
+        if (state == State.Patrol)
         {
             destination = new Vector3(Random.Range(StartPos.x - 1.0f, StartPos.x + 1.0f),
                         Random.Range(StartPos.y - 1.0f, StartPos.y + 1.0f),
                         -.001f);
         }
-        else if (CurrentState == State.Attack)
+        else if (state == State.Attack)
         {
             destination = GameManager.singleton.Player.transform.position;
         }
@@ -109,7 +107,6 @@ public class EnemyA :EnemyAI{
         var gnV = (Vector3)gn.position;
         Target = new Vector3(gnV.x, gnV.y, gnV.z);
         //GameManager.singleton.PathRequests.Add(gameObject);
-
         m_Seeker.StartPath(transform.position, Target, OnPathComplete);
     }
 

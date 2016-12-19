@@ -29,7 +29,7 @@ public class BulletDie : MonoBehaviour {
             GetComponent<Rigidbody2D>().velocity = Vector2.zero;
         }
 
-        yield return new WaitForSeconds(.25f);
+        yield return new WaitForSeconds(.1f);
         try
         {
             GameManager.singleton.BulletManager.GetComponent<BulletManager>().Bullets.Remove(gameObject);
@@ -65,6 +65,7 @@ public class BulletDie : MonoBehaviour {
                 if (GetComponent<SpriteRenderer>().color == Color.yellow)
                 {
                     col.GetComponent<EnemyHealth>().getHit(4, Vector2.zero);
+                    col.GetComponent<EnemyAI>().KnockBack(-(transform.position - col.transform.position).normalized,2.0f);
                     Destroy();
                 }
             }

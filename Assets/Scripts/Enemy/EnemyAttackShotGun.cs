@@ -16,7 +16,7 @@ public class EnemyAttackShotGun : EnemyAttack {
     protected override void FixedUpdate()
     {
         base.FixedUpdate();
-        if (m_timeUntilCanAttack <= Time.time && m_BulletManager.CheckIfCanBullet())
+        if (m_timeUntilCanAttack <= Time.time)
         {
             if (Target != null)
             {
@@ -26,6 +26,8 @@ public class EnemyAttackShotGun : EnemyAttack {
                 Quaternion rotation = Quaternion.identity;
                 for (int i = 0; i < BulletAmount; i++)
                 {
+                    if (!m_BulletManager.CheckIfCanBullet())
+                        break;
                     GameObject bullet;
                     m_CurrentBulletAngle = (1 / Mathf.Tan(dir.y / dir.x)) - i * Spread;
                     Vector3 secondDir = Quaternion.AngleAxis(m_CurrentBulletAngle + 20, Vector3.forward) * dir;
