@@ -46,3 +46,4 @@ Network Trash Folder
 Temporary Items
 .apdisk
 Assets/Scripts/Bullets/BulletDie.cs
+Assets/Scripts/Enemy/EnemyAttackNoRayCast.cs
