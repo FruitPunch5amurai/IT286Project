@@ -981,22 +981,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43445e1dcf9b54f4c9b46d9ff725965b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  throwSpeed: 25
+  throwSpeed: 6
   weaponCont: {fileID: 0}
   idleOffset: {x: 0, y: 0}
   occupied: 0
-  deflectionSpeed: 5
-  _SwingDelay: 0.5
-  basicDmg: 0
-  basicKnock: 0
-  basicSwingSpeed: 2
+  deflectionSpeed: 0.5
+  _SwingDelay: 0.6
+  basicDmg: 3.5
+  basicKnock: 1
+  basicSwingSpeed: 20
   specialOffset: {x: 0, y: 0}
   specialStart: {x: 0, y: 1}
-  dashSpeed: 10
-  dashTime: 1
+  dashSpeed: 3.46
+  dashTime: 0.3
   specialCD: 1
-  specialDmg: 0
-  specialKnock: 0
+  specialDmg: 3
+  specialKnock: 3
   targetColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   glowSpeed: 0.005
   colorThreshold: 0.1
