@@ -117,7 +117,7 @@ public class Hammer : MonoBehaviour, IWeapon
                 //Slow the enemies down
                 for (int i = 0; i < enemies.Count; i++)
                 {
-                    enemies[i].AddComponent<SlowStatusEffect>().ApplyStatusEffect();
+                    enemies[i].AddComponent<SlowStatusEffect>();
                 }
 
                 weaponCont.GetComponent<weaponHandler>().hitStuff(enemies, projectiles, specialDmg, specialKnock, specialDeflections, deflectionSpeed);
