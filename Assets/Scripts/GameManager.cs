@@ -73,7 +73,7 @@ public class GameManager : MonoBehaviour {
 
 
     }
-    void PlayerDeathRestart()
+    public void PlayerDeathRestart()
     {
         //PlayerControl pm = Player.GetComponent<PlayerControl>();
         //RemoveEnemiesFromRoom(pm.CurrentRoom);

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class PlayerControl : MonoBehaviour
 {
@@ -22,10 +23,28 @@ public class PlayerControl : MonoBehaviour
     public Sprite s;
     public string orientation;
 
+    Transform HealthContainer;
+
     // Use this for initialization
     void Start()
     {
         lastDmg = Time.time - recoveryTime;
+        HealthContainer = GameManager.singleton.Canvas.transform.GetChild(2);
+
+        Vector3 HeartOffset = HealthContainer.GetChild(1).position - HealthContainer.GetChild(0).position;
+        GameObject NewHeart = HealthContainer.GetChild(0).gameObject;
+        GameObject EmptyHeart = GameManager.singleton.Canvas.transform.GetChild(1).GetChild(0).gameObject;
+
+        while (health > HealthContainer.childCount) {
+            GameObject NextEmpty = GameObject.Instantiate(EmptyHeart);
+            GameObject NextHeart = GameObject.Instantiate(NewHeart);
+            NextHeart.transform.position = HealthContainer.GetChild(HealthContainer.childCount - 1).position + HeartOffset;
+            NextEmpty.transform.position = NextHeart.transform.position;
+            NextHeart.transform.parent = HealthContainer;
+            NextEmpty.transform.parent = GameManager.singleton.Canvas.transform.GetChild(1);
+            NextHeart.transform.localScale = HealthContainer.GetChild(0).localScale;
+            NextEmpty.transform.localScale = NextHeart.transform.localScale;
+        }
     }
 
     // Update is called once per frame
@@ -140,8 +159,7 @@ public class PlayerControl : MonoBehaviour
             if (!move) transform.position = transform.position + new Vector3(input.x, 0, 0);
             else
             {
-                Debug.Log("Weird");
-                transform.Translate(input);
+                transform.Translate(new Vector2(input.x, 0));
             }
         }
         else
@@ -164,8 +182,7 @@ public class PlayerControl : MonoBehaviour
             if (!move) transform.position = transform.position + new Vector3(0, input.y, 0);
             else
             {
-                Debug.Log("Weird");
-                transform.Translate(input);
+                transform.Translate(new Vector2(0, input.y));
             }
         }
         else {
@@ -180,11 +197,14 @@ public class PlayerControl : MonoBehaviour
             if (health <= 0)
             {
                 //Death state stuff goes here
+                HealthContainer.GetChild(0).GetComponent<Image>().color = new Color(HealthContainer.GetChild(health).GetComponent<Image>().color.r, HealthContainer.GetChild(health).GetComponent<Image>().color.g, HealthContainer.GetChild(health).GetComponent<Image>().color.b, 0);
+                GameManager.singleton.PlayerDeathRestart();
             }
             else {
                 lastDmg = Time.time;
                 recovering = true;
                 //Update health in the UI
+                HealthContainer.GetChild(health).GetComponent<Image>().color = new Color(HealthContainer.GetChild(health).GetComponent<Image>().color.r, HealthContainer.GetChild(health).GetComponent<Image>().color.g, HealthContainer.GetChild(health).GetComponent<Image>().color.b, 0);
             }
         }
     }
